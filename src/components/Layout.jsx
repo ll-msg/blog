@@ -1,0 +1,43 @@
+import { NavLink } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { FaSun, FaMoon } from "react-icons/fa";
+import Sidebar from './Sidebar';
+
+export default function Layout({children}) {
+    const [light, setLight] = useState(false);
+    const [open, setOpen] = useState(false);
+
+    // light/night mode
+    useEffect(() => {
+        if (light) {
+            document.body.classList.add("light");
+        } else {
+            document.body.classList.remove("light");
+        }
+    }, [light])
+
+    // esc close side bar
+    useEffect(() => {
+        const onKey = (e) => { if (e.key === 'Escape') setOpen(false); };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+      }, []);
+
+    return (
+        <div>
+            <header className="header-row">
+                <button className='header-btn' onClick={() => setOpen(!open)}> ☰ </button>
+                <nav className="nav-bar">
+                    <NavLink to='/' end>Home</NavLink>
+                    <NavLink to='/about'>About</NavLink>
+                    <button className='header-btn' onClick={() => setLight(!light)}> {light ? <FaMoon/> : <FaSun/>} </button>
+                </nav>
+            </header>
+
+            {open && <div className="sidebar-backdrop" onClick={() => setOpen(false)} />}
+            {open && <Sidebar open={open} onClose={() => setOpen(false)} />}
+
+            <main>{children}</main>
+        </div>
+    )
+}
