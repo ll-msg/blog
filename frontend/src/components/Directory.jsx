@@ -1,12 +1,18 @@
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { apiCall } from './Helper';
 
 export default function Directory() {
     const navigate = useNavigate();
-    
-    const tableContent = [
-        { id: 1, name: "What is Next.js?"},
-        { id: 2, name: "What is this one?"}
-    ]
+    const [dir, setDir] = useState([]);
+
+    useEffect(() => {
+        const path = window.location.pathname;
+        const id = path.split("/").pop();
+        apiCall('GET', `http://localhost:5000/${id}/directory`, null, null, "").then(data => {
+            if (data) setDir(data);
+        })
+    }, [])
 
     const handleClick = (tableId) => {
         navigate(`article/${tableId}`)
@@ -14,7 +20,7 @@ export default function Directory() {
     return (
         <div className="tableContent">
             <ul>
-                {tableContent.map(t => <li key={t.id} onClick={() => handleClick(t.id)}>{t.name}</li>)}
+                {dir.map(d => <li key={d.id} onClick={() => handleClick(d.id)}>{d.title}</li>)}
             </ul>
         </div>
     )

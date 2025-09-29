@@ -91,6 +91,8 @@ body{
 .header-btn:hover{ border-color: color-mix(in oklab, var(--primary) 40%, var(--border)); }
 .header-btn:active{ transform: translateY(1px); }
 
+.header-avatar {display:flex; height: 40px; width: 40px; border-radius: 50%;}
+
 /* side bar + main content */
 .container{
   --sidew: 240px;
@@ -277,6 +279,124 @@ body{
   outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
+
+/* quick ball on homepage */
+.quick-ball {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 99;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  border: none;
+  box-shadow: var(--shadow);
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+.quick-ball:hover {
+  background: var(--primary-2);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.3);
+}
+
+.quick-ball:active {
+  transform: translateY(1px);
+}
+
+/* create article */
+.markdown-input {
+  width: 100%;
+  min-height: 200px;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 14px;
+  resize: vertical;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.markdown-input.small {
+  min-height: auto;
+}
+
+.markdown-preview {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  max-height: 300px;
+  overflow-y: auto;
+  color: var(--text);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.modal-actions button {
+  padding: 8px 16px;
+  border-radius: 10px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s ease, transform 0.06s ease;
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+.modal-actions button:hover {
+  background: var(--primary-2);
+}
+
+.modal-actions button:active {
+  transform: translateY(1px);
+}
+
+.modal-select {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  font-size: 16px;
+  font-family: inherit;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-chevron-down' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px 16px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.modal-select:hover {
+  border-color: color-mix(in oklab, var(--primary) 40%, var(--border));
+}
+
+.modal-select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--primary) 40%, transparent);
+}
+
+
 
 
 /* responsive */
