@@ -55,31 +55,29 @@ export default function ArticleForm({ mode = "create", article = null }) {
 
   //TODO: need automatic retrieve catoegory
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
+    <div className="modal-content">
 
-        <h2>{mode === "create" ? "Create Article" : "Update Article"}</h2>
-        
-        <h2>Select Field</h2>
-        <select className="modal-select" value={categoryName} onChange={(e) => setCategoryName(e.target.value)}>
-            <option value="">--Please choose a field--</option>
-            {categories && categories.map(c => (<option key={c.id}>{c.name}</option>))}
-        </select>
+      <h2>{mode === "create" ? "Create Article" : "Update Article"}</h2>
+      
+      <h2>Select Field</h2>
+      <select className="modal-select" value={categoryName} onChange={(e) => setCategoryName(e.target.value)}>
+          <option value="">--Please choose a field--</option>
+          {categories && categories.map(c => (<option key={c.id}>{c.name}</option>))}
+      </select>
 
-        <h2>Title</h2>
-        <textarea className="markdown-input small" id="create-title" value={title} onChange={(e) => setTitle(e.target.value)}></textarea>
-        
-        <h2>Content</h2>
-        <textarea className="markdown-input" id="create-markdown-input" value={content} onChange={(e) => setContent(e.target.value)} placeholder="Put your article here in markdown format"/>
-        
-        <h2>Preview</h2>
-        <div className="markdown-preview">
-          <ReactMarkdown>{content}</ReactMarkdown>
-        </div>
+      <h2>Title</h2>
+      <textarea className="markdown-input small" id="create-title" value={title} onChange={(e) => setTitle(e.target.value)}></textarea>
+      
+      <h2>Content</h2>
+      <textarea className="markdown-input" id="create-markdown-input" value={content} onChange={(e) => setContent(e.target.value)} placeholder="Put your article here in markdown format"/>
+      
+      <h2>Preview</h2>
+      <div className="markdown-preview">
+        <ReactMarkdown>{content}</ReactMarkdown>
+      </div>
 
-        <div className="modal-actions">
-          <button onClick={onSubmit}>{mode === "create" ? "Upload" : "Update"}</button>
-        </div>
+      <div className="modal-actions">
+        <button onClick={onSubmit}>{mode === "create" ? "Upload" : "Update"}</button>
       </div>
     </div>
   );

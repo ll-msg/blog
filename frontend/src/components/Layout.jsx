@@ -43,7 +43,6 @@ export default function Layout({children}) {
     return (
         <div>
             <header className="header-row">
-                <button className='header-btn' onClick={() => setOpen(!open)}> ☰ </button>
                 <nav className="nav-bar">
                     <NavLink to='/' end>Home</NavLink>
                     <NavLink to='/about'>About</NavLink>
@@ -52,10 +51,6 @@ export default function Layout({children}) {
                     <button className='header-btn' onClick={() => setLight(!light)}> {light ? <FaMoon/> : <FaSun/>} </button>
                 </nav>
             </header>
-
-            {open && <div className="sidebar-backdrop" onClick={() => setOpen(false)} />}
-            {open && <Sidebar open={open} onClose={() => setOpen(false)} />}
-
             <main>{children}</main>
         </div>
     )
