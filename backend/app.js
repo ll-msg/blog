@@ -204,7 +204,7 @@ app.get('/:categoryId/directory', async function(req, res) {
  */
 app.get('/categories', async function(req, res) {
   try{
-    const result = await pool.query(`SELECT name FROM categories`);
+    const result = await pool.query(`SELECT * FROM categories`);
     res.json(result.rows);
   } catch(err) {
     console.error(err);

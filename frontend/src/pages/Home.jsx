@@ -7,14 +7,13 @@ import { apiCall } from '../components/Helper';
 export default function Home() {
     const navigate = useNavigate();
     const [role, setRole] = useState('user');
+    const [categories, setCategories] = useState(null);
 
-    //TODO: need automatic retrieve catoegory
-    const categories = [
-        { id: 1, name: 'AI', description: '总之这是一个测试例子我已经尽可能写长一点了总之它是用来测试description长度的' }, 
-        { id: 2, name: 'UI/UX', description: 'JS learning' },
-        { id: 3, name: 'Media Player', description: ''},
-        { id: 4, name: 'Secret', description: ''}
-    ];
+    useEffect(() => {
+    apiCall('GET', 'http://localhost:5000/categories').then(data => {
+        if (data) setCategories(data);
+    })
+    }, []);
 
     const gotoDir = (dirId) => {
         navigate(`/content/${dirId}`)
@@ -45,7 +44,7 @@ export default function Home() {
             </div>
             <div className="cards">
                 {/*TODO: probably add icons*/}
-                {categories.map(c => <Card key={c.id} category={c} handleClick={gotoDir}/>)}
+                {categories && categories.map(c => <Card key={c.id} category={c} handleClick={gotoDir}/>)}
             </div>
             {(role == 'admin') && <button className='quick-ball' onClick={() => openModal()}> + </button>}
         </div>
