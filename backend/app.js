@@ -144,6 +144,45 @@ app.post('/article/create', async function(req, res) {
   }
 });
 
+app.get('/article/:articleId', async function(req, res) {
+  try{
+    const articleId = req.params.articleId;
+    const result = await pool.query(`
+      SELECT * FROM articles WHERE id = $1
+    `, [articleId]);
+    res.json(result.rows[0]);
+  } catch(err) {
+    console.log(err);
+    res.status(500).json({ error: 'Failed to retrieve the article' });
+  }
+})
+
+//TODO: allow category update
+app.put('/article/:articleId', async function(req, res) {
+  try{
+    const articleId = req.params.articleId
+    const {title, content} = req.body;
+    const result = await pool.query(`
+      UPDATE articles SET title = $1, body = $2 WHERE id = $3
+      RETURNING *
+    `, [title, content, articleId]);
+    res.json(result.rows[0]);
+  } catch(err) {
+    console.log(err);
+    res.status(500).json({ error: 'Failed to update the article' });
+  }
+})
+
+app.delete('/article/:articleId', async (req, res) => {
+  try{
+    const articleId = req.params.articleId;
+    const result = await pool.query(`DELETE FROM articles WHERE id = $1`, [articleId]);
+  } catch(err) {
+    console.log(err);
+    res.status(500).json({ error: 'Failed to delete the article' });
+  }
+})
+
 /**
  * Directory Routes
  */
@@ -157,5 +196,18 @@ app.get('/:categoryId/directory', async function(req, res) {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Failed to retrieve the directory' });
+  }
+})
+
+/**
+ * Category Route
+ */
+app.get('/categories', async function(req, res) {
+  try{
+    const result = await pool.query(`SELECT name FROM categories`);
+    res.json(result.rows);
+  } catch(err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to retrieve the categories' });
   }
 })

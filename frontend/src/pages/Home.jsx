@@ -6,7 +6,8 @@ import { apiCall } from '../components/Helper';
 
 export default function Home() {
     const navigate = useNavigate();
-    const [loggedIn, setLoggedIn] = useState(false);
+    const [role, setRole] = useState('user');
+
     //TODO: need automatic retrieve catoegory
     const categories = [
         { id: 1, name: 'AI', description: '总之这是一个测试例子我已经尽可能写长一点了总之它是用来测试description长度的' }, 
@@ -23,7 +24,7 @@ export default function Home() {
     useEffect(() => {
         apiCall('GET', 'http://localhost:5000/logged', null, null, "").then(data => {
             if (data) {
-                setLoggedIn(true);
+                setRole(data.role);
             }
         });
     }, []);
@@ -46,7 +47,7 @@ export default function Home() {
                 {/*TODO: probably add icons*/}
                 {categories.map(c => <Card key={c.id} category={c} handleClick={gotoDir}/>)}
             </div>
-            {loggedIn && <button className='quick-ball' onClick={() => openModal()}> + </button>}
+            {(role == 'admin') && <button className='quick-ball' onClick={() => openModal()}> + </button>}
         </div>
     )
 }

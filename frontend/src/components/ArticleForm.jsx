@@ -1,12 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { apiCall } from "./Helper";
 
-export default function ArticleForm() {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [categoryName, setCategoryName] = useState("");
+export default function ArticleForm({ mode = "create", article = null }) {
+  const [title, setTitle] = useState(article?.title || "");
+  const [content, setContent] = useState(article?.body || "");
+  const [categoryName, setCategoryName] = useState(article?.categoryName || "");
+  const [categories, setCategories] = useState(null);
 
+  useEffect(() => {
+    apiCall('GET', 'http://localhost:5000/categories').then(data => {
+      if (data) setCategories(data);
+    })
+  }, []);
+ 
   const onSubmit = async() => {
     /**
      * 2. upload to database
@@ -17,17 +24,32 @@ export default function ArticleForm() {
       return;
     }
     
-    const res = await apiCall('POST', 'http://localhost:5000/article/create', {
-        title,
-        content, 
-        userId: 1,
-        createdAt: new Date().toISOString(),
-        categoryName
-    }, null, null);
-    if (res) {
+    if (mode === "create") {
+      try{
+          await apiCall("POST", "http://localhost:5000/article/create", {
+          title,
+          content,
+          userId: 1,
+          createdAt: new Date().toISOString(),
+          categoryName
+        });
         alert("Your article has been successfully uploaded!");
-    } else {
-        alert("error")
+      } catch(err) {
+        alert(err);
+        return;
+      }
+    } else if (mode === "update") {
+      try{
+          await apiCall("PUT", `http://localhost:5000/article/${article.id}`, {
+          title,
+          content,
+          categoryName
+        });
+        alert("Your article has been successfully updated!");
+      } catch (err) {
+        alert(err);
+        return;
+      }
     }
   }
 
@@ -35,13 +57,13 @@ export default function ArticleForm() {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
+
+        <h2>{mode === "create" ? "Create Article" : "Update Article"}</h2>
         
         <h2>Select Field</h2>
-        {/*TODO: category id/user id */}
         <select className="modal-select" value={categoryName} onChange={(e) => setCategoryName(e.target.value)}>
             <option value="">--Please choose a field--</option>
-            <option value="AI">AI</option>
-            <option value="UI/UX">UI/UX</option>
+            {categories && categories.map(c => (<option key={c.id}>{c.name}</option>))}
         </select>
 
         <h2>Title</h2>
@@ -56,7 +78,7 @@ export default function ArticleForm() {
         </div>
 
         <div className="modal-actions">
-          <button onClick={() => onSubmit()}>Upload</button>
+          <button onClick={onSubmit}>{mode === "create" ? "Upload" : "Update"}</button>
         </div>
       </div>
     </div>
