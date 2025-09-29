@@ -8,6 +8,7 @@ export default function Home() {
     const navigate = useNavigate();
     const [role, setRole] = useState('user');
     const [categories, setCategories] = useState(null);
+    const [input, setInput] = useState("");
 
     useEffect(() => {
     apiCall('GET', 'http://localhost:5000/categories').then(data => {
@@ -32,6 +33,12 @@ export default function Home() {
         navigate(`/content/create`)
     }
 
+    // search for content
+    const search = () => {
+        navigate(`/search?q=${encodeURIComponent(input)}`);
+    };
+
+
     return (
         <div>
             <div className='welcome-msg'>
@@ -39,8 +46,8 @@ export default function Home() {
                 <div className="walk-dino"></div>
             </div>
             <div className="search-bar">
-                <input type="text" placeholder="What are you looking for today?"/>
-                <button className="header-btn"><FaSearch /></button>
+                <input type="text" placeholder="What are you looking for today?" value={input} onChange={(e) => setInput(e.target.value)}/>
+                <button className="header-btn" onClick={() => search()}><FaSearch /></button>
             </div>
             <div className="cards">
                 {/*TODO: probably add icons*/}

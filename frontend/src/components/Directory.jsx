@@ -15,7 +15,7 @@ export default function Directory() {
     }, [])
 
     const handleClick = (tableId) => {
-        navigate(`article/${tableId}`)
+        navigate(`/article/${tableId}`)
     }
     return (
         <div className="tableContent">

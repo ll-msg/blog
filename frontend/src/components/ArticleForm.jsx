@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { apiCall } from "./Helper";
+import { useNavigate } from 'react-router-dom';
 
 export default function ArticleForm({ mode = "create", article = null }) {
   const [title, setTitle] = useState(article?.title || "");
   const [content, setContent] = useState(article?.body || "");
   const [categoryName, setCategoryName] = useState(article?.categoryName || "");
   const [categories, setCategories] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     apiCall('GET', 'http://localhost:5000/categories').then(data => {
@@ -34,6 +36,7 @@ export default function ArticleForm({ mode = "create", article = null }) {
           categoryName
         });
         alert("Your article has been successfully uploaded!");
+        navigate('/');
       } catch(err) {
         alert(err);
         return;
@@ -46,6 +49,7 @@ export default function ArticleForm({ mode = "create", article = null }) {
           categoryName
         });
         alert("Your article has been successfully updated!");
+        navigate('/');
       } catch (err) {
         alert(err);
         return;

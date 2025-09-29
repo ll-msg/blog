@@ -379,8 +379,6 @@ body{
   box-shadow: 0 0 0 2px color-mix(in oklab, var(--primary) 40%, transparent);
 }
 
-
-
 /* Directory */
 .tableContent {
   max-width: 720px;
@@ -446,6 +444,45 @@ body{
   font-size: 15px;
   color: var(--muted);
   margin-bottom: 20px;
+}
+
+/* search result */
+.search-result {
+  max-width: 720px;
+  margin: 32px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 0 16px;
+}
+
+.search-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px 24px;
+  transition: box-shadow 0.2s ease, transform 0.1s ease;
+  cursor: pointer;
+}
+
+.search-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0,0,0,.3);
+  border-color: color-mix(in oklab, var(--primary) 28%, var(--border));
+}
+
+.search-card h3 {
+  margin: 0 0 8px;
+  font-size: 20px;
+  color: var(--text);
+}
+
+.search-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.6;
 }
 
 

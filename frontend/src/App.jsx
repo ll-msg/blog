@@ -5,6 +5,7 @@ import Directory from './components/Directory.jsx';
 import ArticleForm from './components/ArticleForm.jsx';
 import Article from './components/Article.jsx';
 import Update from './components/Update.jsx';
+import Search from './components/Search.jsx';
 
 
 export default function App(){
@@ -14,8 +15,9 @@ export default function App(){
         <Route path="/" element={<Home/>}/>
         <Route path="/content/:dirId" element={<Directory/>}/>
         <Route path="/content/create" element={<ArticleForm mode="create"/>}/>
-        <Route path="/content/:dirId/article/:articleId/update" element={<Update/>}/>
-        <Route path="/content/:dirId/article/:articleId" element={<Article/>}/>
+        <Route path="article/:articleId/update" element={<Update/>}/>
+        <Route path="article/:articleId" element={<Article/>}/>
+        <Route path="/search" element={<Search />} />
       </Routes>
     </Layout>
   );

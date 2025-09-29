@@ -211,3 +211,23 @@ app.get('/categories', async function(req, res) {
     res.status(500).json({ error: 'Failed to retrieve the categories' });
   }
 })
+
+/**
+ * Search Route
+ */
+app.get('/search', async function(req, res) {
+  const query = req.query.q;
+  const ilikeQuery = `%${query}%`;
+  try{
+    // fuzzy matching
+    const result = await pool.query (`SELECT id, title, 
+      CASE WHEN position($1 in body) > 0 THEN SUBSTRING(body FROM POSITION($1 in body) - 20 FOR 100) 
+      else SUBSTRING(body FROM 1 FOR 100) 
+      END AS snippet 
+      FROM articles WHERE title ILIKE $2 or body ILIKE $2;`, [query, ilikeQuery])
+      res.json(result.rows);
+  }catch(err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to search' });
+  }
+})
