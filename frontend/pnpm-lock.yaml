@@ -23,9 +23,6 @@ importers:
       react-markdown:
         specifier: ^10.1.0
         version: 10.1.0(@types/react@19.1.13)(react@19.1.1)
-      react-markdown-editor-lite:
-        specifier: ^1.3.4
-        version: 1.3.4(react@19.1.1)
       react-router-dom:
         specifier: ^7.9.2
         version: 7.9.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -1049,9 +1046,6 @@ packages:
       '@chromatic-com/playwright':
         optional: true
 
-  classnames@2.5.1:
-    resolution: {integrity: sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==}
-
   color-convert@2.0.1:
     resolution: {integrity: sha512-RRECPsj7iu/xb5oKYcsFHSppFNnsj/52OVTRKb4zP5onXwVF3zVmmToNcOfGC+CRDpfK/U584fMg38ZHCaElKQ==}
     engines: {node: '>=7.0.0'}
@@ -1228,9 +1222,6 @@ packages:
   esutils@2.0.3:
     resolution: {integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==}
     engines: {node: '>=0.10.0'}
-
-  eventemitter3@4.0.7:
-    resolution: {integrity: sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==}
 
   expect-type@1.2.2:
     resolution: {integrity: sha512-JhFGDVJ7tmDJItKhYgJCGLOWjuK9vPxiXoUFLwLDc99NlmklilbiQJwoctZtt13+xMw91MCk/REan6MWHqDjyA==}
@@ -1799,11 +1790,6 @@ packages:
   react-is@17.0.2:
     resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
 
-  react-markdown-editor-lite@1.3.4:
-    resolution: {integrity: sha512-PhS4HzLzSgCsr8O9CfJX75nAYmZ0NwpfviLxARlT0Tau+APOerDSHSw3u9hub5wd0EqmonWibw0vhXXNu4ldRA==}
-    peerDependencies:
-      react: ^16.9.0 || ^17.0.0 || ^18.0.0
-
   react-markdown@10.1.0:
     resolution: {integrity: sha512-qKxVopLT/TyA6BX3Ue5NwabOsAzm0Q7kAPwq6L+wWDwisYs7R8vZ0nRXqq6rkueboxpkjvLGU9fWifiX/ZZFxQ==}
     peerDependencies:
@@ -2088,10 +2074,6 @@ packages:
 
   uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
-
-  uuid@8.3.2:
-    resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
-    hasBin: true
 
   vfile-message@4.0.3:
     resolution: {integrity: sha512-QTHzsGd1EhbZs4AsQ20JX1rC3cOlt/IWJruk893DfLRr57lcnOeMaWG4K0JrRta4mIJZKth2Au3mM3u03/JWKw==}
@@ -3114,8 +3096,6 @@ snapshots:
 
   chromatic@12.2.0: {}
 
-  classnames@2.5.1: {}
-
   color-convert@2.0.1:
     dependencies:
       color-name: 1.1.4
@@ -3311,8 +3291,6 @@ snapshots:
       '@types/estree': 1.0.8
 
   esutils@2.0.3: {}
-
-  eventemitter3@4.0.7: {}
 
   expect-type@1.2.2: {}
 
@@ -3989,14 +3967,6 @@ snapshots:
 
   react-is@17.0.2: {}
 
-  react-markdown-editor-lite@1.3.4(react@19.1.1):
-    dependencies:
-      '@babel/runtime': 7.28.4
-      classnames: 2.5.1
-      eventemitter3: 4.0.7
-      react: 19.1.1
-      uuid: 8.3.2
-
   react-markdown@10.1.0(@types/react@19.1.13)(react@19.1.1):
     dependencies:
       '@types/hast': 3.0.4
@@ -4318,8 +4288,6 @@ snapshots:
   uri-js@4.4.1:
     dependencies:
       punycode: 2.3.1
-
-  uuid@8.3.2: {}
 
   vfile-message@4.0.3:
     dependencies:
