@@ -6,8 +6,7 @@ import Sidebar from './Sidebar';
 
 export default function Layout({children}) {
     const [light, setLight] = useState(false);
-    const [open, setOpen] = useState(false);
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState(null);
     const [loggedIn, setLoggedIn] = useState(false);
 
     // light/night mode
@@ -19,20 +18,13 @@ export default function Layout({children}) {
         }
     }, [light])
 
-    // esc close side bar
-    useEffect(() => {
-        const onKey = (e) => { if (e.key === 'Escape') setOpen(false); };
-        window.addEventListener('keydown', onKey);
-        return () => window.removeEventListener('keydown', onKey);
-      }, []);
-
     // github login
     // JWT token
     useEffect(() => {
         apiCall('GET', 'http://localhost:5000/logged', null, null, "").then(data => {
-            if (data) {
-                setUser(data);
+            if (data && data.role != 'guest') {
                 setLoggedIn(true);
+                setUser(data);
             }
         });
     }, []);

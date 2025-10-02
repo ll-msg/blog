@@ -108,16 +108,26 @@ app.get('/auth/github/callback',
 });
 
 // check log in status
-app.get('/logged', 
-  passport.authenticate('jwt', {session: false}),
-  function(req, res) {
-    res.json({
-      github_id: req.user.github_id,
-      username: req.user.username,
-      role: req.user.role,
-      avatar: req.user.avatar
+app.get('/logged', (req, res, next) => {
+  passport.authenticate('jwt', { session: false }, (err, user, info) => {
+    if (err) return next(err);
+    if (!user) {
+      return res.json({
+        loggedIn: false,
+        role: 'guest'
+      });
+    }
+
+    return res.json({
+      loggedIn: true,
+      github_id: user.github_id,
+      username: user.username,
+      role: user.role,
+      avatar: user.avatar
     });
+  })(req, res, next);
 });
+
 
 /**
  * Article Routes
@@ -147,6 +157,8 @@ app.post('/article/create', async function(req, res) {
 app.get('/article/:articleId', async function(req, res) {
   try{
     const articleId = req.params.articleId;
+    // fixme: update view strict mode double call?
+    await pool.query(`UPDATE articles SET views = views + 1 WHERE id = $1`, [articleId]);
     const result = await pool.query(`
       SELECT * FROM articles WHERE id = $1
     `, [articleId]);
@@ -182,6 +194,7 @@ app.delete('/article/:articleId', async (req, res) => {
     res.status(500).json({ error: 'Failed to delete the article' });
   }
 })
+
 
 /**
  * Directory Routes
@@ -230,4 +243,12 @@ app.get('/search', async function(req, res) {
     console.error(err);
     res.status(500).json({ error: 'Failed to search' });
   }
+})
+
+/**
+ * View Count Route
+ */
+app.post('/view/increment', async function(req, res) {
+  const articleId = req.params.articleId;
+  const curView = await pool.query (`SELECT view FROM articles WHERE id = $1`, [articleId]);
 })

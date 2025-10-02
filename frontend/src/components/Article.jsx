@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Article() {
     const [article, setArticle] = useState(null);
-    const [role, setRole] = useState('user');
+    const [role, setRole] = useState('guest');
     const navigate = useNavigate();
 
     useEffect(() => {
