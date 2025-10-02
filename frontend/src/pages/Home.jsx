@@ -53,6 +53,7 @@ export default function Home() {
                 {/*TODO: probably add icons*/}
                 {categories && categories.map(c => <Card key={c.id} category={c} handleClick={gotoDir}/>)}
             </div>
+            <iframe data-testid="embed-iframe" className="spotify-player" style={{borderRadius:"12px"}} src="https://open.spotify.com/embed/playlist/471GHyuVhCTgR5q928kw4o?utm_source=generator" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
             {(role == 'admin') && <button className='quick-ball' onClick={() => openModal()}> + </button>}
         </div>
     )

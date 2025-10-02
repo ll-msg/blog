@@ -289,6 +289,17 @@ body{
   transform: translateY(1px);
 }
 
+/* spotify player */
+.spotify-player {
+  display: block;
+  width: calc(2 * var(--card-w) + clamp(16px, 4vw, 32px)); 
+  max-width: 100%;
+  margin: 32px auto 0;
+  border: none;
+  height: 152px;
+  color: #0b2a21;
+}
+
 /* Create article */
 .modal-content {
   padding: 24px;
