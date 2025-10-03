@@ -11,9 +11,10 @@ export default function Home() {
     const [input, setInput] = useState("");
 
     useEffect(() => {
-    apiCall('GET', `${API_BASE}/categories`).then(data => {
-        if (data) setCategories(data);
-    })
+        console.log(API_BASE)
+        apiCall('GET', `${API_BASE}/categories`).then(data => {
+            if (data) setCategories(data);
+        })
     }, []);
 
     const gotoDir = (dirId) => {
