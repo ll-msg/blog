@@ -8,14 +8,28 @@ import jwt from 'jsonwebtoken'
 import cookieParser from 'cookie-parser';
 import { pool } from './db.js';
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://blog.vercel.app",
+  /\.vercel\.app$/
+];
+
 
 dotenv.config();
 
-const app = express();
 app.use(cors({
-  origin: 'http://localhost:5173', 
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true); // allow non-browser clients
+    if (allowedOrigins.some(o => 
+      (o instanceof RegExp ? o.test(origin) : o === origin)
+    )) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS: " + origin));
+    }
+  },
   credentials: true
-})); //TODO: change to real frontend path
+}));
 app.use(express.json());
 app.use(passport.initialize());
 
@@ -63,7 +77,7 @@ app.get('/auth/github', passport.authenticate('github'));
 //FIXME: not redirect directly?
 
 app.get('/auth/github/callback', 
-  passport.authenticate('github', { failureRedirect: 'http://localhost:5173/', session: false }),
+  passport.authenticate('github', { failureRedirect: '/', session: false }),
   function(req, res) {
     // Successful authentication, redirect home.
     const userInfo = req.user;
@@ -104,7 +118,7 @@ app.get('/auth/github/callback',
       path: '/token/refresh', //Fixme: fix path
       maxAge: 7*24*60*60*1000
     })
-    res.redirect(`http://localhost:5173/`); // back to home page with token
+    res.redirect(`/`); // back to home page with token
 });
 
 // check log in status
