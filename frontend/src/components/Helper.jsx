@@ -32,4 +32,4 @@ export async function apiCall(method, url, data=null, setError, errMsg, auth=tru
     }
 }
 
-export const API_BASE = import.meta.env.VITE_API_URL;
+export const API_BASE = import.meta.env.VITE_API_URL || "https://r-blog.onrender.com";
