@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { apiCall } from './Helper';
+import { apiCall, API_BASE } from "./Helper";
 
 export default function Directory() {
     const navigate = useNavigate();
@@ -10,13 +10,13 @@ export default function Directory() {
     useEffect(() => {
         const path = window.location.pathname;
         const id = path.split("/").pop();
-        apiCall('GET', `http://localhost:5000/${id}/directory`, null, null, "").then(data => {
+        apiCall('GET', `${API_BASE}/${id}/directory`, null, null, "").then(data => {
             if (data) setDir(data);
         })
     }, []);
 
     useEffect(() => {
-        apiCall('GET', 'http://localhost:5000/logged', null, null, "").then(data => {
+        apiCall('GET', `${API_BASE}/logged`, null, null, "").then(data => {
             if (data) {
                 setRole(data.role);
             }

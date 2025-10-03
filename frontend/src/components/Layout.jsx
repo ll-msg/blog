@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { FaSun, FaMoon, FaGithub } from "react-icons/fa";
-import { apiCall } from './Helper';
+import { apiCall, API_BASE } from "./Helper";
 import Sidebar from './Sidebar';
 
 export default function Layout({children}) {
@@ -21,7 +21,7 @@ export default function Layout({children}) {
     // github login
     // JWT token
     useEffect(() => {
-        apiCall('GET', 'http://localhost:5000/logged', null, null, "").then(data => {
+        apiCall('GET', `${API_BASE}/logged`, null, null, "").then(data => {
             if (data && data.role != 'guest') {
                 setLoggedIn(true);
                 setUser(data);
@@ -29,7 +29,7 @@ export default function Layout({children}) {
         });
     }, []);
     const handleLogin = () => {
-        window.location.href = "http://localhost:5000/auth/github";
+        window.location.href = `${API_BASE}/auth/github`;
     };
 
     return (

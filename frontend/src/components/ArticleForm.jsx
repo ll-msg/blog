@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
-import { apiCall } from "./Helper";
+import { apiCall, API_BASE } from "./Helper";
 import { useNavigate } from 'react-router-dom';
+
 
 export default function ArticleForm({ mode = "create", article = null }) {
   const [title, setTitle] = useState(article?.title || "");
@@ -11,7 +12,7 @@ export default function ArticleForm({ mode = "create", article = null }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    apiCall('GET', 'http://localhost:5000/categories').then(data => {
+    apiCall('GET', `${API_BASE}/categories`).then(data => {
       if (data) setCategories(data);
     })
   }, []);
@@ -28,7 +29,7 @@ export default function ArticleForm({ mode = "create", article = null }) {
     
     if (mode === "create") {
       try{
-          await apiCall("POST", "http://localhost:5000/article/create", {
+          await apiCall("POST", `${API_BASE}/article/create`, {
           title,
           content,
           userId: 1,
@@ -43,7 +44,7 @@ export default function ArticleForm({ mode = "create", article = null }) {
       }
     } else if (mode === "update") {
       try{
-          await apiCall("PUT", `http://localhost:5000/article/${article.id}`, {
+          await apiCall("PUT", `${API_BASE}/article/${article.id}`, {
           title,
           content,
           categoryName

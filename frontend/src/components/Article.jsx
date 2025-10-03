@@ -1,4 +1,4 @@
-import { apiCall } from './Helper';
+import { apiCall, API_BASE } from "./Helper";
 import { useEffect, useState } from 'react';
 import ReactMarkdown from "react-markdown";
 import { useNavigate } from 'react-router-dom';
@@ -11,14 +11,14 @@ export default function Article() {
     useEffect(() => {
         const path = window.location.pathname;
         const id = path.split("/").pop();
-        apiCall('GET', `http://localhost:5000/article/${id}`, null, null, "").then(data => {
+        apiCall('GET', `${API_BASE}/article/${id}`, null, null, "").then(data => {
             if (data) setArticle(data);
         })
     }, []);
 
     // check logged in
     useEffect(() => {
-        apiCall('GET', 'http://localhost:5000/logged', null, null, "").then(data => {
+        apiCall('GET', `${API_BASE}:5000/logged`, null, null, "").then(data => {
             if (data) {
                 setRole(data.role);
             }
@@ -34,7 +34,7 @@ export default function Article() {
         const path = window.location.pathname;
         const id = path.split("/").pop();
         try{
-            apiCall('DELETE', `http://localhost:5000/article/${id}`, null, null, "");
+            apiCall('DELETE', `${API_BASE}/article/${id}`, null, null, "");
             alert("You successfully deleted this article!");
             navigate('/');
         } catch(err){

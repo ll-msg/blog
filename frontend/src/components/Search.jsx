@@ -1,6 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { apiCall } from "./Helper";
+import { apiCall, API_BASE } from "./Helper";
 import { useNavigate } from 'react-router-dom';
 
 export default function Search() {
@@ -12,7 +12,7 @@ export default function Search() {
 
     useEffect(() => {
         try{
-            apiCall('GET', `http://localhost:5000/search?q=${encodeURIComponent(input)}`).then(data => {
+            apiCall('GET', `${API_BASE}/search?q=${encodeURIComponent(input)}`).then(data => {
                 console.log(data)
                 if (data && data.length > 0) {
                     setArticles(data);

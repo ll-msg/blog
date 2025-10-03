@@ -2,7 +2,7 @@ import { FaSearch } from 'react-icons/fa';
 import Card from '../components/Card';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { apiCall } from '../components/Helper';
+import { apiCall, API_BASE } from '../components/Helper';
 
 export default function Home() {
     const navigate = useNavigate();
@@ -11,7 +11,7 @@ export default function Home() {
     const [input, setInput] = useState("");
 
     useEffect(() => {
-    apiCall('GET', 'http://localhost:5000/categories').then(data => {
+    apiCall('GET', `${API_BASE}/categories`).then(data => {
         if (data) setCategories(data);
     })
     }, []);
@@ -22,7 +22,7 @@ export default function Home() {
 
     // logged in page
     useEffect(() => {
-        apiCall('GET', 'http://localhost:5000/logged', null, null, "").then(data => {
+        apiCall('GET', `${API_BASE}/logged`, null, null, "").then(data => {
             if (data) {
                 setRole(data.role);
             }
