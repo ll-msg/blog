@@ -119,7 +119,7 @@ app.get('/auth/github/callback',
       path: '/token/refresh', //Fixme: fix path
       maxAge: 7*24*60*60*1000
     })
-    res.redirect(`/`); // back to home page with token
+    res.redirect(`https://blog-five-drab-79.vercel.app/`); // back to home page with token
 });
 
 // check log in status
