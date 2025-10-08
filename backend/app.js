@@ -78,7 +78,7 @@ app.get('/auth/github', passport.authenticate('github'));
 //FIXME: not redirect directly?
 
 app.get('/auth/github/callback', 
-  passport.authenticate('github', { failureRedirect: '/', session: false }),
+  passport.authenticate('github', { failureRedirect: `https://blog-five-drab-79.vercel.app/`, session: false }),
   function(req, res) {
     // Successful authentication, redirect home.
     const userInfo = req.user;
