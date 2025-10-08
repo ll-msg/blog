@@ -2,6 +2,7 @@ import { apiCall, API_BASE } from "./Helper";
 import { useEffect, useState } from 'react';
 import ReactMarkdown from "react-markdown";
 import { useNavigate } from 'react-router-dom';
+import { FaEye } from "react-icons/fa";
 
 export default function Article() {
     const [article, setArticle] = useState(null);
@@ -43,19 +44,19 @@ export default function Article() {
     }
 
     return (
-        <div className="article-container">
-            <div className="article-header">
-                <h2>{article?.title}</h2>
-                {role === 'admin' && (<button className="update-btn" onClick={() => startUpdate()}> Update</button>)}
-                {role === 'admin' && (<button className="delete-btn" onClick={() => startDelete()}> Delete</button>)}
+        <div className="max-w-3xl mx-auto space-y-8">
+            <header className="border-b border-neutral-300 pb-4 mt-10">
+                <h2 className="text-3xl font-semibold tracking-tight">{article?.title}</h2>
+            </header>
+            <div className="flex items-center justify-between mt-2 text-sm text-neutral-500">
+                <p>Last modified: {new Date(article?.created_at).toLocaleDateString()}</p>
+                <span className="inline-flex items-center gap-1 text-sm text-neutral-500">{<FaEye />} {article?.views}</span>
             </div>
-            <div className="article-meta">
-                <p>{new Date(article?.created_at).toLocaleDateString()}</p>
-            </div>
-            <div className="markdown-body">
+            {role === 'admin' && (<button className="px-4 py-1 border border-neutral-800 rounded-md text-sm hover:bg-neutral-900 hover:text-white transition" onClick={() => startUpdate()}> Update</button>)}
+            {role === 'admin' && (<button className="px-4 py-1 border border-neutral-800 rounded-md text-sm hover:bg-red-600 hover:border-red-600 hover:text-white transition" onClick={() => startDelete()}> Delete</button>)}
+            <article className="prose max-w-none text-neutral-800 leading-relaxed border-t border-neutral-200 pt-6">
                 <ReactMarkdown>{article?.body}</ReactMarkdown>
-            </div>
-            <div className="article-views">👁 {article?.views}</div>
+            </article>
         </div>
     );
 }

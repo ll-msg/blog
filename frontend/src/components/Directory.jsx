@@ -31,12 +31,21 @@ export default function Directory() {
         navigate(`/article/${tableId}`)
     }
     return (
-        <div className="tableContent">
-            <ul>
-                {dir.map(d => <li key={d.id} onClick={() => handleClick(d.id)}>{d.title}</li>)}
+        <div className="min-h-[100dvh] bg-white text-neutral-900 px-6 py-10">
+            <ul className="divide-y divide-neutral-200">
+                {dir.map(d => <li className="cursor-pointer py-3 text-neutral-800 hover:text-black transition-colors" key={d.id} onClick={() => handleClick(d.id)}>
+                    <span className="underline-offset-2 hover:underline">
+                        {d.title}
+                    </span>
+                </li>)}
             </ul>
+            {dir.length === 0 && (
+                <p className="text-neutral-500 italic mt-4">
+                    No articles found in this category.
+                </p>
+            )}
             {/*TODO: need auto fill category, think need restructure the route */}
-            {(role == 'admin') && <button className='quick-ball' onClick={() => openModal()}> + </button>}
+            {(role == 'admin') && <button className="fixed bottom-6 right-6 w-12 h-12 text-xl font-bold rounded-full bg-black text-white hover:bg-neutral-800 transition" onClick={() => openModal()}> + </button>}
         </div>
     )
 }

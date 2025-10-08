@@ -60,29 +60,31 @@ export default function ArticleForm({ mode = "create", article = null }) {
 
   //TODO: need automatic retrieve catoegory
   return (
-    <div className="modal-content">
+    <div className="max-w-3xl mx-auto space-y-6">
 
-      <h2>{mode === "create" ? "Create Article" : "Update Article"}</h2>
+      <h2 className="text-2xl font-semibold border-b border-neutral-300 pb-3">
+        {mode === "create" ? "Create Article" : "Update Article"}
+      </h2>
       
-      <h2>Select Field</h2>
-      <select className="modal-select" value={categoryName} onChange={(e) => setCategoryName(e.target.value)}>
+      <label className="block text-sm font-medium text-neutral-700 mb-2"> Select Field</label>
+      <select  className="w-full border-b border-neutral-300 bg-transparent outline-none py-2 text-neutral-800 focus:border-black" value={categoryName} onChange={(e) => setCategoryName(e.target.value)}>
           <option value="">--Please choose a field--</option>
           {categories && categories.map(c => (<option key={c.id}>{c.name}</option>))}
       </select>
 
-      <h2>Title</h2>
-      <textarea className="markdown-input small" id="create-title" value={title} onChange={(e) => setTitle(e.target.value)}></textarea>
+      <label className="block text-sm font-medium text-neutral-700 mb-2">Title</label>
+      <textarea className="w-full border-b border-neutral-300 bg-transparent outline-none py-2 text-neutral-800 focus:border-black" id="create-title" value={title} onChange={(e) => setTitle(e.target.value)}></textarea>
       
-      <h2>Content</h2>
-      <textarea className="markdown-input" id="create-markdown-input" value={content} onChange={(e) => setContent(e.target.value)} placeholder="Put your article here in markdown format"/>
+      <label className="block text-sm font-medium text-neutral-700 mb-2">Content</label>
+      <textarea className="w-full min-h-[200px] border-b border-neutral-300 bg-transparent outline-none py-2 text-neutral-800 resize-y focus:border-black" id="create-markdown-input" value={content} onChange={(e) => setContent(e.target.value)} placeholder="Put your article here in markdown format"/>
       
-      <h2>Preview</h2>
-      <div className="markdown-preview">
+      <h2 className="text-sm font-medium text-neutral-700 mb-2">Preview</h2>
+      <div className="prose max-w-none border-t border-neutral-200 pt-4 text-neutral-800">
         <ReactMarkdown>{content}</ReactMarkdown>
       </div>
 
-      <div className="modal-actions">
-        <button onClick={onSubmit}>{mode === "create" ? "Upload" : "Update"}</button>
+      <div className="flex justify-end">
+        <button className="px-6 py-2 border border-neutral-800 text-neutral-900 rounded-md hover:bg-neutral-900 hover:text-white transition" onClick={onSubmit}>{mode === "create" ? "Upload" : "Update"}</button>
       </div>
     </div>
   );

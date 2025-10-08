@@ -30,14 +30,14 @@ export default function Search() {
     }
     
     return (
-        <div className="search-result">
+         <div className="min-h-screen bg-neutral-50 text-neutral-900 px-4 py-12">
             {articles && articles.map(a => (
-                <div key={a.id} className="search-card" onClick={() => openArticle(a.id)}>
-                    <h3>{a.title}</h3>
-                    <p>{a.snippet}</p>
+                <div key={a.id} className="cursor-pointer border border-neutral-300 rounded-lg bg-white p-6 hover:border-black hover:shadow-sm transition" onClick={() => openArticle(a.id)}>
+                    <h3 className="text-lg font-semibold text-neutral-900 mb-2">{a.title}</h3>
+                    <p className="text-sm text-neutral-600 leading-relaxed">{a.snippet}</p>
                 </div>
             ))}
-            {no && <p>{no}</p>}
+            {no &&  <p className="text-neutral-600 italic">{no}</p>}
         </div>
     )
 }
