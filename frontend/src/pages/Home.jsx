@@ -39,6 +39,7 @@ export default function Home() {
         navigate(`/search?q=${encodeURIComponent(input)}`);
     };
 
+    console.log(role);
 
     return (
         <div>
