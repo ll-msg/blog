@@ -109,13 +109,13 @@ app.get('/auth/github/callback',
     res.cookie('accessToken', token, {
       httpOnly: true,
       secure: true,
-      sameSite: 'strict',
+      sameSite: 'none',
       maxAge: 30*60*1000
     });
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: true,
-      sameSite: 'strict',
+      sameSite: 'none',
       path: '/token/refresh', //Fixme: fix path
       maxAge: 7*24*60*60*1000
     })
