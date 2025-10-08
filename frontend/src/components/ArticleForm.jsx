@@ -62,7 +62,7 @@ export default function ArticleForm({ mode = "create", article = null }) {
   return (
     <div className="max-w-3xl mx-auto space-y-6">
 
-      <h2 className="text-2xl font-semibold border-b border-neutral-300 pb-3">
+      <h2 className="text-2xl font-semibold border-b border-neutral-300 pb-3 mt-10">
         {mode === "create" ? "Create Article" : "Update Article"}
       </h2>
       

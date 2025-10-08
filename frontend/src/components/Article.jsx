@@ -19,7 +19,7 @@ export default function Article() {
 
     // check logged in
     useEffect(() => {
-        apiCall('GET', `${API_BASE}:5000/logged`, null, null, "").then(data => {
+        apiCall('GET', `${API_BASE}/logged`, null, null, "").then(data => {
             if (data) {
                 setRole(data.role);
             }

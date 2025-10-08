@@ -6,12 +6,11 @@ import { apiCall, API_BASE } from '../components/Helper';
 
 export default function Home() {
     const navigate = useNavigate();
-    const [role, setRole] = useState('user');
+    const [role, setRole] = useState('guest');
     const [categories, setCategories] = useState(null);
     const [input, setInput] = useState("");
 
     useEffect(() => {
-        console.log(API_BASE)
         apiCall('GET', `${API_BASE}/categories`).then(data => {
             if (data) setCategories(data);
         })
@@ -38,8 +37,6 @@ export default function Home() {
     const search = () => {
         navigate(`/search?q=${encodeURIComponent(input)}`);
     };
-
-    console.log(role);
 
     return (
         <div>
