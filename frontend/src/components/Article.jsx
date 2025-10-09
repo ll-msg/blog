@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import ReactMarkdown from "react-markdown";
 import { useNavigate } from 'react-router-dom';
 import { FaEye } from "react-icons/fa";
+import remarkGfm from 'remark-gfm'
+import rehypeRaw from "rehype-raw";
 
 export default function Article() {
     const [article, setArticle] = useState(null);
@@ -54,8 +56,10 @@ export default function Article() {
             </div>
             {role === 'admin' && (<button className="px-4 py-1 border border-neutral-800 rounded-md text-sm hover:bg-neutral-900 hover:text-white transition" onClick={() => startUpdate()}> Update</button>)}
             {role === 'admin' && (<button className="px-4 py-1 border border-neutral-800 rounded-md text-sm hover:bg-red-600 hover:border-red-600 hover:text-white transition" onClick={() => startDelete()}> Delete</button>)}
-            <article className="prose max-w-none text-neutral-800 leading-relaxed border-t border-neutral-200 pt-6">
-                <ReactMarkdown>{article?.body}</ReactMarkdown>
+            <article className="prose max-w-none border-t border-neutral-200 pt-4 text-neutral-800">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {article?.body?.replace(/\\n/g, '\n')}
+                </ReactMarkdown>
             </article>
         </div>
     );
