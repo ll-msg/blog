@@ -3,6 +3,22 @@ import { useEffect, useState } from "react";
 import { apiCall, API_BASE } from "./Helper";
 import { useNavigate } from 'react-router-dom';
 
+function stripMarkdown(markdown) {
+  return markdown
+    .replace(/[#_*>\-\[\]()`]/g, "")
+    .replace(/!\[.*?\]\(.*?\)/g, "")
+    .replace(/\[(.*?)\]\(.*?\)/g, "$1")
+    .replace(/\n+/g, " ")
+    .trim();
+}
+
+function highlight(text, keyword) {
+  if (!keyword) return text;
+  const regex = new RegExp(`(${keyword})`, "gi");
+  return text.replace(regex, "<strong class='text-black font-semibold'>$1</strong>");
+}
+
+
 export default function Search() {
     const [searchParams] = useSearchParams();
     const input = searchParams.get("q");
@@ -30,14 +46,17 @@ export default function Search() {
     }
     
     return (
-         <div className="min-h-screen bg-neutral-50 text-neutral-900 px-4 py-12">
-            {articles && articles.map(a => (
-                <div key={a.id} className="cursor-pointer border border-neutral-300 rounded-lg bg-white p-6 hover:border-black hover:shadow-sm transition" onClick={() => openArticle(a.id)}>
-                    <h3 className="text-lg font-semibold text-neutral-900 mb-2">{a.title}</h3>
-                    <p className="text-sm text-neutral-600 leading-relaxed">{a.snippet}</p>
-                </div>
-            ))}
-            {no &&  <p className="text-neutral-600 italic">{no}</p>}
+        <div className="min-h-screen bg-neutral-50 text-neutral-900 px-4 py-12">
+        {articles && articles.length > 0 ? articles.map(a => {
+            const plainText = stripMarkdown(a.snippet);
+            const highlighted = highlight(plainText, input);
+            return (
+            <div key={a.id} className="cursor-pointer border border-neutral-300 rounded-lg bg-white p-6 hover:border-black hover:shadow-sm transition mb-4" onClick={() => openArticle(a.id)}>
+                <h3 className="text-lg font-semibold text-neutral-900 mb-2" dangerouslySetInnerHTML={{ __html: highlight(a.title, input) }} />
+                <p className="text-sm text-neutral-600 leading-relaxed" dangerouslySetInnerHTML={{ __html: highlighted }} />
+            </div>
+            );
+        }) : (no && <p className="text-neutral-600 italic">{no}</p>)}
         </div>
-    )
+    );
 }

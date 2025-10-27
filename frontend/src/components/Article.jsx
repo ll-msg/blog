@@ -46,18 +46,29 @@ export default function Article() {
     }
 
     return (
-        <div className="max-w-3xl mx-auto space-y-8">
+        <div className="max-w-3xl mx-auto space-y-8 mb-20">
             <header className="border-b border-neutral-300 pb-4 mt-10">
                 <h2 className="text-3xl font-semibold tracking-tight">{article?.title}</h2>
+                {role === "admin" && (
+                    <div className="flex items-center gap-2 mt-5">
+                    <button onClick={startUpdate} className="px-3 py-1.5 text-sm font-medium border border-neutral-300 rounded-md text-neutral-700 hover:bg-neutral-100 transition"> Edit </button>
+                    <button 
+                        onClick={() => {
+                        if (window.confirm("Delete this article?")) startDelete();
+                        }}
+                        className="px-3 py-1.5 text-sm font-medium border border-red-400 text-red-600 rounded-md hover:bg-red-50 transition"
+                    >
+                        Delete
+                    </button>
+                    </div>
+                )}
             </header>
             <div className="flex items-center justify-between mt-2 text-sm text-neutral-500">
                 <p>Last modified: {new Date(article?.created_at).toLocaleDateString()}</p>
                 <span className="inline-flex items-center gap-1 text-sm text-neutral-500">{<FaEye />} {article?.views}</span>
             </div>
-            {role === 'admin' && (<button className="px-4 py-1 border border-neutral-800 rounded-md text-sm hover:bg-neutral-900 hover:text-white transition" onClick={() => startUpdate()}> Update</button>)}
-            {role === 'admin' && (<button className="px-4 py-1 border border-neutral-800 rounded-md text-sm hover:bg-red-600 hover:border-red-600 hover:text-white transition" onClick={() => startDelete()}> Delete</button>)}
             <article className="prose max-w-none border-t border-neutral-200 pt-4 text-neutral-800">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
                     {article?.body?.replace(/\\n/g, '\n')}
                 </ReactMarkdown>
             </article>

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { apiCall, API_BASE } from "./Helper";
 import { useNavigate } from 'react-router-dom';
+import remarkGfm from 'remark-gfm'
+import rehypeRaw from "rehype-raw";
 
 
 export default function ArticleForm({ mode = "create", article = null }) {
@@ -60,7 +62,7 @@ export default function ArticleForm({ mode = "create", article = null }) {
 
   //TODO: need automatic retrieve catoegory
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
+    <div className="max-w-3xl mx-auto space-y-6 mb-20">
 
       <h2 className="text-2xl font-semibold border-b border-neutral-300 pb-3 mt-10">
         {mode === "create" ? "Create Article" : "Update Article"}
@@ -73,14 +75,18 @@ export default function ArticleForm({ mode = "create", article = null }) {
       </select>
 
       <label className="block text-sm font-medium text-neutral-700 mb-2">Title</label>
-      <textarea className="w-full border-b border-neutral-300 bg-transparent outline-none py-2 text-neutral-800 focus:border-black" id="create-title" value={title} onChange={(e) => setTitle(e.target.value)}></textarea>
-      
+      <input type="text" className="w-full border-b border-neutral-300 bg-transparent outline-none py-1 text-neutral-00 focus:border-black" id="create-title" value={title} onChange={(e) => setTitle(e.target.value)}
+        placeholder="Enter your article title"
+      />
+
       <label className="block text-sm font-medium text-neutral-700 mb-2">Content</label>
       <textarea className="w-full min-h-[200px] border-b border-neutral-300 bg-transparent outline-none py-2 text-neutral-800 resize-y focus:border-black" id="create-markdown-input" value={content} onChange={(e) => setContent(e.target.value)} placeholder="Put your article here in markdown format"/>
       
       <h2 className="text-sm font-medium text-neutral-700 mb-2">Preview</h2>
       <div className="prose max-w-none border-t border-neutral-200 pt-4 text-neutral-800">
-        <ReactMarkdown>{content}</ReactMarkdown>
+        <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+          {content}
+        </ReactMarkdown>
       </div>
 
       <div className="flex justify-end">
