@@ -46,17 +46,21 @@ export default function Search() {
     }
     
     return (
-        <div className="min-h-screen bg-neutral-50 text-neutral-900 px-4 py-12">
+        <div className="min-h-screen bg-darkblue-50 text-darkblue-900 px-4 py-12">
         {articles && articles.length > 0 ? articles.map(a => {
             const plainText = stripMarkdown(a.snippet);
             const highlighted = highlight(plainText, input);
             return (
-            <div key={a.id} className="cursor-pointer border border-neutral-300 rounded-lg bg-white p-6 hover:border-black hover:shadow-sm transition mb-4" onClick={() => openArticle(a.id)}>
-                <h3 className="text-lg font-semibold text-neutral-900 mb-2" dangerouslySetInnerHTML={{ __html: highlight(a.title, input) }} />
-                <p className="text-sm text-neutral-600 leading-relaxed" dangerouslySetInnerHTML={{ __html: highlighted }} />
+            <div key={a.id} className="cursor-pointer border border-border rounded-lg bg-bg-soft p-6 hover:border-black hover:shadow-sm transition mb-4" onClick={() => openArticle(a.id)}>
+                <h3 className="text-lg font-semibold text-darkblue-900 mb-2" dangerouslySetInnerHTML={{ __html: highlight(a.title, input) }} />
+                <p className="text-sm text-darkblue-600 leading-relaxed" dangerouslySetInnerHTML={{ __html: highlighted }} />
             </div>
             );
-        }) : (no && <p className="text-neutral-600 italic">{no}</p>)}
+        }) : (no && <div className="flex flex-col items-center justify-center mt-20 text-darkblue-500 italic">
+                        <p className="text-darkblue-500 italic mt-4">
+                            {no}
+                        </p>
+                    </div>)}
         </div>
     );
 }

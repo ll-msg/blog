@@ -64,33 +64,33 @@ export default function ArticleForm({ mode = "create", article = null }) {
   return (
     <div className="max-w-3xl mx-auto space-y-6 mb-20">
 
-      <h2 className="text-2xl font-semibold border-b border-neutral-300 pb-3 mt-10">
+      <h2 className="text-2xl font-semibold border-b border-border pb-3 mt-10">
         {mode === "create" ? "Create Article" : "Update Article"}
       </h2>
       
-      <label className="block text-sm font-medium text-neutral-700 mb-2"> Select Field</label>
-      <select  className="w-full border-b border-neutral-300 bg-transparent outline-none py-2 text-neutral-800 focus:border-black" value={categoryName} onChange={(e) => setCategoryName(e.target.value)}>
+      <label className="block text-sm font-medium text-text-softmb-2"> Select Field</label>
+      <select  className="w-full border-b border-border bg-transparent outline-none py-2 text-text focus:border-black" value={categoryName} onChange={(e) => setCategoryName(e.target.value)}>
           <option value="">--Please choose a field--</option>
           {categories && categories.map(c => (<option key={c.id}>{c.name}</option>))}
       </select>
 
-      <label className="block text-sm font-medium text-neutral-700 mb-2">Title</label>
-      <input type="text" className="w-full border-b border-neutral-300 bg-transparent outline-none py-1 text-neutral-00 focus:border-black" id="create-title" value={title} onChange={(e) => setTitle(e.target.value)}
+      <label className="block text-sm font-medium text-text-softmb-2">Title</label>
+      <input type="text" className="w-full border-b border-border bg-transparent outline-none py-1 text-darkblue-00 focus:border-black" id="create-title" value={title} onChange={(e) => setTitle(e.target.value)}
         placeholder="Enter your article title"
       />
 
-      <label className="block text-sm font-medium text-neutral-700 mb-2">Content</label>
-      <textarea className="w-full min-h-[200px] border-b border-neutral-300 bg-transparent outline-none py-2 text-neutral-800 resize-y focus:border-black" id="create-markdown-input" value={content} onChange={(e) => setContent(e.target.value)} placeholder="Put your article here in markdown format"/>
+      <label className="block text-sm font-medium text-text-softmb-2">Content</label>
+      <textarea className="w-full min-h-[200px] border-b border-border bg-transparent outline-none py-2 text-text resize-y focus:border-black" id="create-markdown-input" value={content} onChange={(e) => setContent(e.target.value)} placeholder="Put your article here in markdown format"/>
       
-      <h2 className="text-sm font-medium text-neutral-700 mb-2">Preview</h2>
-      <div className="prose max-w-none border-t border-neutral-200 pt-4 text-neutral-800">
+      <h2 className="text-sm font-medium text-text-softmb-2">Preview</h2>
+      <div className="prose max-w-none border-t border-darkblue-200 pt-4 text-text">
         <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
           {content}
         </ReactMarkdown>
       </div>
 
       <div className="flex justify-end">
-        <button className="px-6 py-2 border border-neutral-800 text-neutral-900 rounded-md hover:bg-neutral-900 hover:text-white transition" onClick={onSubmit}>{mode === "create" ? "Upload" : "Update"}</button>
+        <button className="px-6 py-2 border border-darkblue-800 text-darkblue-900 rounded-md hover:bg-darkblue-900 hover:text-white transition" onClick={onSubmit}>{mode === "create" ? "Upload" : "Update"}</button>
       </div>
     </div>
   );

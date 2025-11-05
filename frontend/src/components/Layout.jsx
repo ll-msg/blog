@@ -5,18 +5,20 @@ import { apiCall, API_BASE } from "./Helper";
 import Sidebar from './Sidebar';
 
 export default function Layout({children}) {
-    const [light, setLight] = useState(false);
+    const [dark, setDark] = useState(false);
     const [user, setUser] = useState(null);
     const [loggedIn, setLoggedIn] = useState(false);
 
     // light/night mode
     useEffect(() => {
-        if (light) {
-            document.body.classList.add("light");
+        console.log("useEffect dark ran. dark=", dark);
+        console.log("html.classList =", document.documentElement.classList.value);
+        if (dark) {
+            document.documentElement.classList.add("dark");
         } else {
-            document.body.classList.remove("light");
+            document.documentElement.classList.remove("dark");
         }
-    }, [light])
+    }, [dark])
 
     // github login
     // JWT token
@@ -33,17 +35,17 @@ export default function Layout({children}) {
     };
 
     return (
-        <div>
-            <header className="sticky top-0 z-40 border-b border-neutral-300 bg-white/90 backdrop-blur-md">
+        <div className="bg-bg min-h-screen flex flex-col text-text">
+            <header className="sticky top-0 z-40 border-b border-border bg-bg-soft/90 backdrop-blur-md">
                 <div className="mx-auto max-w-5xl flex items-center justify-between h-16 px-6">
-                    <nav className="flex items-center gap-8 text-sm text-neutral-700">
-                        <NavLink to='/' end className="hover:text-black">Home</NavLink>
-                        <NavLink to='/about' className="hover:text-black">About</NavLink>
+                    <nav className="flex items-center gap-8 text-sm text-text-soft">
+                        <NavLink to='/' end className="hover:text-white">Home</NavLink>
+                        <NavLink to='/about' className="hover:text-white">About</NavLink>
                     </nav>
                     <div className="ml-auto flex items-center gap-2">
-                        {loggedIn && <img className="h-9 w-9 rounded-full object-cover border border-neutral-300" src={user.avatar} alt="header-avatar"/>}
-                        {!loggedIn && <button className="flex items-center justify-center h-9 w-9 border border-neutral-300 rounded-md hover:bg-neutral-100 transition" onClick={() => handleLogin()}>{<FaGithub/>}</button>}
-                        <button className="flex items-center justify-center h-9 w-9 border border-neutral-300 rounded-md hover:bg-neutral-100 transition" onClick={() => setLight(!light)}> {light ? <FaMoon/> : <FaSun/>} </button>
+                        {loggedIn && <img className="h-9 w-9 rounded-full object-cover border border-border" src={user.avatar} alt="header-avatar"/>}
+                        {!loggedIn && <button className="flex items-center justify-center h-9 w-9 border border-border rounded-md hover:bg-bg-hover transition text-gray-200" onClick={() => handleLogin()}>{<FaGithub/>}</button>}
+                        <button className="flex items-center justify-center h-9 w-9 border border-border rounded-md hover:bg-bg-hover transition text-gray-200" onClick={() => setDark(!dark)}> {dark ? <FaSun/> : <FaMoon/>} </button>
                     </div>
                 </div>
             </header>

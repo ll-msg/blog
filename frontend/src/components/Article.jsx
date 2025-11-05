@@ -47,11 +47,11 @@ export default function Article() {
 
     return (
         <div className="max-w-3xl mx-auto space-y-8 mb-20">
-            <header className="border-b border-neutral-300 pb-4 mt-10">
+            <header className="border-b border-border pb-4 mt-10">
                 <h2 className="text-3xl font-semibold tracking-tight">{article?.title}</h2>
                 {role === "admin" && (
                     <div className="flex items-center gap-2 mt-5">
-                    <button onClick={startUpdate} className="px-3 py-1.5 text-sm font-medium border border-neutral-300 rounded-md text-neutral-700 hover:bg-neutral-100 transition"> Edit </button>
+                    <button onClick={startUpdate} className="px-3 py-1.5 text-sm font-medium border border-border rounded-md text-text-soft hover:bg-bg-soft transition"> Edit </button>
                     <button 
                         onClick={() => {
                         if (window.confirm("Delete this article?")) startDelete();
@@ -63,11 +63,11 @@ export default function Article() {
                     </div>
                 )}
             </header>
-            <div className="flex items-center justify-between mt-2 text-sm text-neutral-500">
+            <div className="flex items-center justify-between mt-2 text-sm text-darkblue-500">
                 <p>Last modified: {new Date(article?.created_at).toLocaleDateString()}</p>
-                <span className="inline-flex items-center gap-1 text-sm text-neutral-500">{<FaEye />} {article?.views}</span>
+                <span className="inline-flex items-center gap-1 text-sm text-darkblue-500">{<FaEye />} {article?.views}</span>
             </div>
-            <article className="prose max-w-none border-t border-neutral-200 pt-4 text-neutral-800">
+            <article className="prose prose-darkblue max-w-none border-t border-darkblue-200 pt-4">
                 <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
                     {article?.body?.replace(/\\n/g, '\n')}
                 </ReactMarkdown>

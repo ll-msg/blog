@@ -1,5 +1,59 @@
 @import "tailwindcss";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@variant dark (&:where(.dark *));
+
+@theme {
+  --color-bg:             var(--color-darkblue-100);
+  --color-bg-soft:        var(--color-darkblue-light);
+  --color-bg-hover:       var(--color-darkblue-lighter);
+  --color-border:         var(--color-darkblue-border);
+  --color-text:           var(--color-darkblue-900);
+  --color-text-soft:      var(--color-darkblue-700);
+
+  --color-darkblue-50: #0B1320;
+  --color-darkblue-100: #0F172A;
+  --color-darkblue-200: #1A2234;
+  --color-darkblue-300: #1E293B;
+  --color-darkblue-400: #273449;
+  --color-darkblue-500: #334155;
+  --color-darkblue-600: #475569;
+  --color-darkblue-700: #64748B;
+  --color-darkblue-800: #94A3B8;
+  --color-darkblue-900: #CBD5E1;
+
+  --color-darkblue-light:   #1E293B;
+  --color-darkblue-lighter: #334155;
+  --color-darkblue-border:  #475569;
+}
+
+@variant dark {
+  :root {
+    --color-bg:             #000000;
+    --color-bg-soft:        #111111;
+    --color-bg-hover:       #161616;
+    --color-border:         #222222;
+    --color-text:           #E5E5E5;
+    --color-text-soft:      #999999;
+  }
+}
+
+@layer utilities {
+  .prose-darkblue {
+    --tw-prose-body:          var(--color-darkblue-800);
+    --tw-prose-headings:      var(--color-darkblue-900);
+    --tw-prose-bold:          var(--color-darkblue-900);
+    --tw-prose-links:         var(--color-darkblue-700);
+    --tw-prose-bullets:       var(--color-darkblue-600);
+    --tw-prose-quotes:        var(--color-darkblue-400);
+    --tw-prose-quote-borders: var(--color-darkblue-300);
+    --tw-prose-code:          var(--color-darkblue-900);
+    --tw-prose-th-borders:    var(--color-darkblue-300);
+    --tw-prose-td-borders:    var(--color-darkblue-200);
+  }
+}
+
 @plugin "./typography.js";
+

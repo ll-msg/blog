@@ -39,22 +39,22 @@ export default function Home() {
     };
 
     return (
-        <div>
+        <div className="bg-bg min-h-screen text-text">
             <div className="flex flex-col items-center justify-center mt-16 mb-10 text-center">
                 <h1 className="text-2xl font-semibold tracking-tight">Hello! Welcome to my little study space</h1>
                 <div className="walk-dino"></div>
             </div>
-            <div className="max-w-xl mx-auto flex items-center gap-2 border border-neutral-300 rounded-lg bg-white px-4 py-2 shadow-sm">
-                <input type="text" placeholder="What are you looking for today?" value={input} onChange={(e) => setInput(e.target.value)}
-                className="flex-1 bg-transparent outline-none text-neutral-800 placeholder:text-neutral-400"/>
-                <button className="p-2 border border-neutral-300 rounded-md hover:bg-neutral-100 transition" onClick={() => search()}><FaSearch /></button>
+            <div className="max-w-xl mx-auto flex items-center gap-2 border border-border rounded-lg bg-bg-soft px-4 py-2 shadow-sm">
+                <input type="text" placeholder="What are you looking for today?" value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => {if(e.key === "Enter") search()}}
+                className="flex-1 bg-transparent outline-none text-text placeholder:text-darkblue-400"/>
+                <button className="p-2 border border-border rounded-md hover:bg-bg transition" onClick={() => search()}><FaSearch /></button>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto mt-12 px-4">
                 {/*TODO: probably add icons*/}
                 {categories && categories.map(c => <Card key={c.id} category={c} handleClick={gotoDir}/>)}
             </div>
             
-            {(role == 'admin') && <button className="fixed bottom-6 right-6 w-12 h-12 text-xl font-bold rounded-full bg-black text-white hover:bg-neutral-800 transition" onClick={() => openModal()}> + </button>}
+            {(role == 'admin') && <button className="fixed bottom-6 right-6 w-12 h-12 text-xl font-bold rounded-full bg-black text-white hover:bg-bg transition" onClick={() => openModal()}> + </button>}
         </div>
     )
 }
