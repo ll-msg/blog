@@ -83,7 +83,7 @@ export default function ArticleForm({ mode = "create", article = null }) {
       <textarea className="w-full min-h-[200px] border-b border-border bg-transparent outline-none py-2 text-text resize-y focus:border-black" id="create-markdown-input" value={content} onChange={(e) => setContent(e.target.value)} placeholder="Put your article here in markdown format"/>
       
       <h2 className="text-sm font-medium text-text-softmb-2">Preview</h2>
-      <div className="prose max-w-none border-t border-darkblue-200 pt-4 text-text">
+      <div className="prose prose-darkblue max-w-none border-t border-darkblue-200 pt-4">
         <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
           {content}
         </ReactMarkdown>

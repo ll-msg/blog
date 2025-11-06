@@ -218,7 +218,7 @@ app.get('/:categoryId/directory', async function(req, res) {
   try{
     const categoryId = req.params.categoryId;
     const result = await pool.query(`
-      SELECT id, title FROM articles WHERE category_id = $1
+      SELECT id, title FROM articles WHERE category_id = $1 ORDER BY id ASC
     `, [categoryId]);
     res.json(result.rows);
   } catch (err) {
