@@ -2,7 +2,6 @@ import { NavLink } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { FaSun, FaMoon, FaGithub } from "react-icons/fa";
 import { apiCall, API_BASE } from "./Helper";
-import Sidebar from './Sidebar';
 
 export default function Layout({children}) {
     const [dark, setDark] = useState(false);

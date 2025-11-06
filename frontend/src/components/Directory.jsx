@@ -6,6 +6,7 @@ export default function Directory() {
     const navigate = useNavigate();
     const [dir, setDir] = useState([]);
     const [role, setRole] = useState('user');
+    
 
     useEffect(() => {
         const path = window.location.pathname;
@@ -31,7 +32,7 @@ export default function Directory() {
         navigate(`/article/${tableId}`)
     }
     return (
-        <div className="min-h-[100dvh] bg-bg-soft text-darkblue-900 px-6 py-10">
+        <div className="min-h-[100dvh] bg-bg text-darkblue-900 px-6 py-10">
             <div className="max-w-5xl mx-auto">
                 <ul className="divide-y divide-darkblue-200">
                     {dir.map(d => <li className="cursor-pointer py-3 text-text hover:text-white transition-colors" key={d.id} onClick={() => handleClick(d.id)}>
