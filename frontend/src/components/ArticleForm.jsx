@@ -21,7 +21,7 @@ export default function ArticleForm({ mode = "create", article = null }) {
     })
   }, []);
 
-  const originalCategory = categories.find(
+  const originalCategory = categories?.find(
     c => clearCategoryName(c.name) === categoryName
   );
  
@@ -42,7 +42,7 @@ export default function ArticleForm({ mode = "create", article = null }) {
           content,
           userId: 1,
           createdAt: new Date().toISOString(),
-          categoryName
+          categoryName: originalCategory?.name
         });
         alert("Your article has been successfully uploaded!");
         navigate('/');
@@ -55,7 +55,7 @@ export default function ArticleForm({ mode = "create", article = null }) {
           await apiCall("PUT", `${API_BASE}/article/${article.id}`, {
           title,
           content,
-          categoryName: originalCategory
+          categoryName: originalCategory?.name
         });
         alert("Your article has been successfully updated!");
         navigate('/');
