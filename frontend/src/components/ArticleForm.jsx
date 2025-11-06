@@ -71,7 +71,7 @@ export default function ArticleForm({ mode = "create", article = null }) {
       <label className="block text-sm font-medium text-text-softmb-2"> Select Field</label>
       <select  className="w-full border-b border-border bg-transparent outline-none py-2 text-text focus:border-black" value={categoryName} onChange={(e) => setCategoryName(e.target.value)}>
           <option value="">--Please choose a field--</option>
-          {categories && categories.map(c => (<option key={c.id}>{c.name}</option>))}
+          {categories && categories.map(c => (<option key={c.id} value={c.name}>{c.name}</option>))}
       </select>
 
       <label className="block text-sm font-medium text-text-softmb-2">Title</label>

@@ -3,7 +3,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@variant dark (&:where(.dark *));
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
   --color-bg:             var(--color-darkblue-100);

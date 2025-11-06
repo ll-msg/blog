@@ -71,11 +71,11 @@ export default function Article() {
             {open && (<div className="fixed inset-0 bg-bg-soft/40 z-40"/>)}
             <div className="max-w-3xl mx-auto space-y-8 mb-20">
                 <header className="border-b border-border pb-4 mt-10">
-                    <h2 className="text-3xl font-semibold tracking-tight">{article?.title}</h2>
                     <div className="flex justify-between mt-3 text-sm text-darkblue-400">
                         {prev ? <button onClick={() => navigate(`/article/${prev.id}`)} className="hover:text-white cursor-pointer">← {prev.title}</button> : <span />}
                         {next ? <button onClick={() => navigate(`/article/${next.id}`)} className="hover:text-white cursor-pointer">{next.title} →</button> : <span />}
                     </div>
+                    <h2 className="text-3xl font-semibold tracking-tight">{article?.title}</h2>
                     {role === "admin" && (
                         <div className="flex items-center gap-2 mt-5">
                         <button onClick={startUpdate} className="px-3 py-1.5 text-sm font-medium border border-border rounded-md text-text-soft hover:bg-bg-soft transition"> Edit </button>
