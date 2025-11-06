@@ -9,15 +9,21 @@ import rehypeRaw from "rehype-raw";
 export default function ArticleForm({ mode = "create", article = null }) {
   const [title, setTitle] = useState(article?.title || "");
   const [content, setContent] = useState(article?.body || "");
-  const [categoryName, setCategoryName] = useState(article?.categoryName || "");
   const [categories, setCategories] = useState(null);
   const navigate = useNavigate();
+
+  const clearCategoryName = (name) => name?.trim().toLowerCase();
+  const [categoryName, setCategoryName] = useState(clearCategoryName(article?.categoryName || ""));
 
   useEffect(() => {
     apiCall('GET', `${API_BASE}/categories`).then(data => {
       if (data) setCategories(data);
     })
   }, []);
+
+  const originalCategory = categories.find(
+    c => clearCategoryName(c.name) === categoryName
+  );
  
   const onSubmit = async() => {
     /**
@@ -49,7 +55,7 @@ export default function ArticleForm({ mode = "create", article = null }) {
           await apiCall("PUT", `${API_BASE}/article/${article.id}`, {
           title,
           content,
-          categoryName
+          categoryName: originalCategory
         });
         alert("Your article has been successfully updated!");
         navigate('/');
@@ -69,9 +75,9 @@ export default function ArticleForm({ mode = "create", article = null }) {
       </h2>
       
       <label className="block text-sm font-medium text-text-softmb-2"> Select Field</label>
-      <select  className="w-full border-b border-border bg-transparent outline-none py-2 text-text focus:border-black" value={categoryName} onChange={(e) => setCategoryName(e.target.value)}>
+      <select  className="w-full border-b border-border bg-transparent outline-none py-2 text-text focus:border-black" value={categoryName} onChange={(e) => setCategoryName(clearCategoryName(e.target.value))}>
           <option value="">--Please choose a field--</option>
-          {categories && categories.map(c => (<option key={c.id} value={c.name}>{c.name}</option>))}
+          {categories && categories.map(c => (<option key={c.id} value={clearCategoryName(c.name)}>{c.name}</option>))}
       </select>
 
       <label className="block text-sm font-medium text-text-softmb-2">Title</label>
