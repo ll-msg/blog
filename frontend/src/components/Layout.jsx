@@ -47,7 +47,7 @@ export default function Layout({children}) {
                 <div className="mx-auto max-w-5xl flex items-center justify-between h-16 px-6">
                     <nav className="flex items-center gap-8 text-sm text-text-soft">
                         <NavLink to='/' end className="hover:text-white">Home</NavLink>
-                        <NavLink to='/about' className="hover:text-white">About</NavLink>
+                        <NavLink to='/about' className="hover:text-white">About Me</NavLink>
                     </nav>
                     <div className="flex-1"></div>
                     <div className="flex items-center gap-2 border border-border rounded-lg bg-bg-soft px-4 py-1 shadow-sm w-80 mr-5">
@@ -62,7 +62,10 @@ export default function Layout({children}) {
                     </div>
                 </div>
             </header>
-            <main>{children}</main>
+            <main className="flex-1">{children}</main>
+            <footer className="mt-14 py-4 text-center text-text-soft border-t border-border text-sm bg-bg-soft/90">
+                © 2025 MyBlog • Built with React
+            </footer>
         </div>
     )
 }

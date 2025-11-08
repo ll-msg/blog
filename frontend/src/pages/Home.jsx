@@ -62,7 +62,7 @@ export default function Home() {
     }, [])
 
     return (
-        <div className="bg-bg min-h-screen text-text">
+        <div className="bg-bg text-text">
             <div className="flex flex-col items-center sm:flex-row sm:items-start sm:justify-center gap-10 mt-20">
                 <pre className="text-left text-[15px]">
 {`const currentTime = {
