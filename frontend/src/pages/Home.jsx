@@ -1,5 +1,5 @@
 import Card from '../components/Card';
-import Clock from "../components/clock";
+import Moveclock from "../components/Moveclock";
 import { useEffect, useState } from 'react';
 import { apiCall, API_BASE } from '../components/Helper';
 import { useNavigate } from 'react-router-dom';
@@ -76,7 +76,7 @@ export default function Home() {
   dayProgress: ${curTime.dayProgress}
 };`}
                 </pre>
-                <Clock />
+                <Moveclock />
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto mt-12 px-4">
                 {/*TODO: probably add icons*/}
