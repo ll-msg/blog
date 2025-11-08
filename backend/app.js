@@ -71,12 +71,16 @@ passport.use(new JwtStrategy(opts, async function(jwt_payload, done) {
 
 
 /**
+ * Health check for render
+ */
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
+/**
  * Auth routes
  */
 app.get('/auth/github', passport.authenticate('github'));
-
-//FIXME: not redirect directly?
-
 app.get('/auth/github/callback', 
   passport.authenticate('github', { failureRedirect: `https://blog-five-drab-79.vercel.app/`, session: false }),
   function(req, res) {
