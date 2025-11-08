@@ -1,11 +1,12 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { FaSun, FaMoon, FaGithub, FaSearch } from "react-icons/fa";
 import { apiCall, API_BASE } from "./Helper";
-import { useNavigate } from 'react-router-dom';
+
 
 export default function Layout({children}) {
     const navigate = useNavigate();
+    const location = useLocation();
     const [dark, setDark] = useState(false);
     const [user, setUser] = useState(null);
     const [loggedIn, setLoggedIn] = useState(false);
@@ -40,6 +41,13 @@ export default function Layout({children}) {
     const search = () => {
         navigate(`/search?q=${encodeURIComponent(input)}`);
     };
+
+    // clear search
+    useEffect(() => {
+        if (location.pathname === '/' || location.pathname === '/about') {
+            setInput(""); 
+        }
+    }, [location.pathname])
 
     return (
         <div className="bg-bg min-h-screen flex flex-col text-text">

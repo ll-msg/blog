@@ -51,7 +51,6 @@ export default function Home() {
             second: now.getSeconds(),
             dayProgress: progress + "%"
         }
-
         setCurTime(currentTime);
     }
 
