@@ -59,7 +59,7 @@ export default function Layout({children}) {
                     </nav>
                     <div className="flex-1"></div>
                     <div className="flex items-center gap-2 border border-border rounded-lg bg-bg-soft px-4 py-1 shadow-sm w-80 mr-5">
-                        <input type="text" placeholder="What are you looking for today?" value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => {if(e.key === "Enter") search()}}
+                        <input type="text" placeholder="e.g. Majority vote Algorithm..." value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => {if(e.key === "Enter") search()}}
                         className="flex-1 bg-transparent outline-none text-text placeholder:text-darkblue-400"/>
                         <button className="p-2 rounded-md hover:bg-bg transition" onClick={() => search()}><FaSearch /></button>
                     </div>

@@ -28,10 +28,11 @@ export default function Search() {
     useEffect(() => {
         try{
             apiCall('GET', `${API_BASE}/search?q=${encodeURIComponent(input)}`).then(data => {
-                console.log(data)
+                console.log("searching...")
                 if (data && data.length > 0) {
                     setArticles(data);
                 } else {
+                    setArticles([]);
                     setNo("Sorry there's nothing here yet :(");
                 }
             });
