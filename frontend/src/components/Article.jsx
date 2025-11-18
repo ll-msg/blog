@@ -51,6 +51,8 @@ export default function Article() {
 
     // find previous / next article
     useEffect(() => {
+        setPrev(null)
+        setNext(null)
         if (!article) return;
         apiCall("GET", `${API_BASE}/${article.category_id}/directory`, null, null, "")
         .then(list => {
@@ -71,7 +73,7 @@ export default function Article() {
             {open && (<div className="fixed inset-0 bg-bg-soft/40 z-40"/>)}
             <div className="max-w-3xl mx-auto space-y-8 mb-20">
                 <header className="border-b border-border pb-4 mt-10">
-                    <div className="flex justify-between mt-3 text-sm text-darkblue-400">
+                    <div className="flex justify-between mt-3 text-sm text-darkblue-800 mb-3">
                         {prev ? <button onClick={() => navigate(`/article/${prev.id}`)} className="hover:text-white cursor-pointer">← {prev.title}</button> : <span />}
                         {next ? <button onClick={() => navigate(`/article/${next.id}`)} className="hover:text-white cursor-pointer">{next.title} →</button> : <span />}
                     </div>

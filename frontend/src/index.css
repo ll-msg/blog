@@ -5,6 +5,21 @@
 @tailwind utilities;
 @custom-variant dark (&:where(.dark, .dark *));
 
+@layer base {
+  code {
+    @apply bg-gray-700 text-gray-100 px-1 py-0.5 rounded font-mono text-sm;
+  }
+}
+
+.prose code::before {
+  content: none !important;
+}
+
+.prose code::after {
+  content: none !important;
+}
+
+
 @theme {
   --color-bg:             var(--color-darkblue-100);
   --color-bg-soft:        var(--color-darkblue-light);
