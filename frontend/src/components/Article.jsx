@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaEye } from "react-icons/fa";
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from "rehype-raw";
-import Sidebar from './Sidebar';
+import CategorySideBar from "./CategorySideBar";
 
 export default function Article() {
     const [article, setArticle] = useState(null);
@@ -69,7 +69,7 @@ export default function Article() {
             <button className="fixed top-4 left-4 z-50 bg-bg border border-border rounded-md px-3 py-1 shadow hover:bg-darkblue-400" onClick={() => setOpen(true)}>
                 ☰
             </button>
-            <Sidebar open={open} onClose={() => setOpen(false)} categoryId={article?.category_id}/>
+            <CategorySideBar open={open} onClose={() => setOpen(false)} article={article?.id}/>
             {open && (<div className="fixed inset-0 bg-bg-soft/40 z-40"/>)}
             <div className="max-w-3xl mx-auto space-y-8 mb-20">
                 <header className="border-b border-border pb-4 mt-10">
