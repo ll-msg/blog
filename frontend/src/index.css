@@ -14,9 +14,15 @@
 .prose code::before {
   content: none !important;
 }
-
 .prose code::after {
   content: none !important;
+}
+.prose > pre {
+  display: contents !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  background: none !important;
 }
 
 

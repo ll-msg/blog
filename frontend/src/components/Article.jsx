@@ -6,6 +6,8 @@ import { FaEye } from "react-icons/fa";
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from "rehype-raw";
 import CategorySideBar from "./CategorySideBar";
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { atomOneDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 export default function Article() {
     const [article, setArticle] = useState(null);
@@ -92,12 +94,35 @@ export default function Article() {
                         </div>
                     )}
                 </header>
+                
                 <div className="flex items-center justify-between mt-2 text-sm text-darkblue-500">
                     <p>Last modified: {new Date(article?.created_at).toLocaleDateString()}</p>
                     <span className="inline-flex items-center gap-1 text-sm text-darkblue-500">{<FaEye />} {article?.views}</span>
                 </div>
+
                 <article className="prose prose-darkblue max-w-none border-t border-darkblue-200 pt-4">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+                    <ReactMarkdown 
+                        remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}
+                        components={{
+                            code({node, inline, className, children, ...props}) {
+                                const match = /language-(\w+)/.exec(className || "");
+                                if (!inline && match) {
+                                    return (
+                                        <div className="code-block-wrapper">
+                                        <SyntaxHighlighter style={atomOneDark} language={match[1]} PreTag="pre">
+                                            {String(children).replace(/\n$/, "")}
+                                        </SyntaxHighlighter>
+                                        </div>
+                                    );
+                                }
+                                return (
+                                    <code className={className} {...props}>
+                                        {children}
+                                    </code>
+                                );
+                            }
+                        }}
+                    >
                         {article?.body?.replace(/\\n/g, '\n')}
                     </ReactMarkdown>
                 </article>
