@@ -9,6 +9,7 @@ export default function Home() {
     const [role, setRole] = useState('guest');
     const [categories, setCategories] = useState(null);
     const [curTime, setCurTime] = useState({});
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
 
     useEffect(() => {
         apiCall('GET', `${API_BASE}/categories`).then(data => {
@@ -43,12 +44,12 @@ export default function Home() {
 
         const currentTime = {
             year: now.getFullYear(),
-            month: now.getMonth() + 1,
+            month: months[now.getMonth()],
             day: String(now.getDate()).padStart(2, '0'),
             dayOfWeek: now.toLocaleDateString('en-US', { weekday: 'long' }),
-            hour: now.getHours(),
-            minute: now.getMinutes(),
-            second: now.getSeconds(),
+            hour: String(now.getHours()).padStart(2, '0'),
+            minute: String(now.getMinutes()).padStart(2, '0'),
+            second: String(now.getSeconds()).padStart(2, '0'),
             dayProgress: progress + "%"
         }
         setCurTime(currentTime);
@@ -63,18 +64,16 @@ export default function Home() {
     return (
         <div className="bg-bg text-text">
             <div className="flex flex-col items-center sm:flex-row sm:items-start sm:justify-center gap-10 mt-20">
-                <pre className="text-left text-[15px]">
-{`const currentTime = {
-  year: ${curTime.year},
-  month: ${curTime.month},
-  day: ${curTime.day},
-  dayOfWeek: "${curTime.dayOfWeek}",
-  hour: ${curTime.hour},
-  minute: ${curTime.minute},
-  second: ${curTime.second},
-  dayProgress: ${curTime.dayProgress}
-};`}
-                </pre>
+                <div class="bg-darkblue-300 text-white rounded-xl p-4 flex items-center gap-6 w-fit">
+                    <div class="bg-darkblue-200 text-white px-8 py-6 rounded-xl text-5xl font-bold">
+                        {curTime.hour}:{curTime.minute}:{curTime.second}
+                    </div>
+                    <div class="flex flex-col items-center leading-tight gap-2 font-mono">
+                        <span class="text-md">{curTime.dayOfWeek}</span>
+                        <span class="text-2xl font-semibold text-[#EBBD65]">{curTime.day}</span>
+                        <span class="text-md">{curTime.month}</span>
+                    </div>
+                </div>
                 <Moveclock />
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto mt-12 px-4">

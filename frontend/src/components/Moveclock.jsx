@@ -22,7 +22,7 @@ export default function Clock() {
         <div className="relative w-40 h-40 sm:w-30 sm:h-30 rounded-full border-2 border-text-soft flex items-center justify-center bg-bg-soft/40 shadow-lg">
 
             <div
-                className="absolute w-1.5 h-9 bg-white rounded origin-bottom top-1/2 left-1/2"
+                className="absolute w-1.5 h-8 bg-white rounded origin-bottom top-1/2 left-1/2"
                 style={{ transform: `translate(-50%, -100%) rotate(${hourDeg}deg)` }}
             />
             <div
