@@ -68,39 +68,39 @@ export default function Article() {
 
     return (
         <div>
-            <button className="fixed top-4 left-4 z-50 bg-bg border border-border rounded-md px-3 py-1 shadow hover:bg-darkblue-400" onClick={() => setOpen(true)}>
+            <button className="fixed top-3 left-3 sm:top-4 sm:left-4 z-50 bg-bg border border-border rounded-md px-3 py-1 shadow hover:bg-darkblue-400" onClick={() => setOpen(true)}>
                 ☰
             </button>
             <CategorySideBar open={open} onClose={() => setOpen(false)} article={article?.id}/>
             {open && (<div className="fixed inset-0 bg-bg-soft/40 z-40"/>)}
-            <div className="max-w-3xl mx-auto space-y-8 mb-20">
+            <div className="max-w-3xl mx-auto space-y-8 mb-20 px-4 sm:px-0">
                 <header className="border-b border-border pb-4 mt-10">
-                    <div className="flex justify-between mt-3 text-sm text-darkblue-800 mb-3">
+                    <div className="flex flex-col sm:flex-row justify-between gap-2 mt-3 text-sm text-darkblue-800 mb-3">
                         {prev ? <button onClick={() => navigate(`/article/${prev.id}`)} className="hover:text-white cursor-pointer">← {prev.title}</button> : <span />}
                         {next ? <button onClick={() => navigate(`/article/${next.id}`)} className="hover:text-white cursor-pointer">{next.title} →</button> : <span />}
                     </div>
-                    <h2 className="text-3xl font-semibold tracking-tight">{article?.title}</h2>
+                    <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">{article?.title}</h2>
                     {role === "admin" && (
-                        <div className="flex items-center gap-2 mt-5">
-                        <button onClick={startUpdate} className="px-3 py-1.5 text-sm font-medium border border-border rounded-md text-text-soft hover:bg-bg-soft transition"> Edit </button>
-                        <button 
-                            onClick={() => {
-                                if (window.confirm("Delete this article?")) startDelete();
-                            }}
-                            className="px-3 py-1.5 text-sm font-medium border border-red-400 text-red-600 rounded-md hover:bg-red-50 transition"
-                        >
-                            Delete
-                        </button>
+                        <div className="flex items-center gap-2 mt-5 flex-wrap">
+                            <button onClick={startUpdate} className="px-3 py-1.5 text-sm font-medium border border-border rounded-md text-text-soft hover:bg-bg-soft transition"> Edit </button>
+                            <button 
+                                onClick={() => {
+                                    if (window.confirm("Delete this article?")) startDelete();
+                                }}
+                                className="px-3 py-1.5 text-sm font-medium border border-red-400 text-red-600 rounded-md hover:bg-red-50 transition"
+                            >
+                                Delete
+                            </button>
                         </div>
                     )}
                 </header>
                 
-                <div className="flex items-center justify-between mt-2 text-sm text-darkblue-500">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mt-2 text-sm text-darkblue-500">
                     <p>Last modified: {new Date(article?.created_at).toLocaleDateString()}</p>
                     <span className="inline-flex items-center gap-1 text-sm text-darkblue-500">{<FaEye />} {article?.views}</span>
                 </div>
 
-                <article className="prose prose-darkblue max-w-none border-t border-darkblue-200 pt-4">
+                <article className="prose prose-sm sm:prose-base prose-darkblue max-w-none border-t border-darkblue-200 pt-4">
                     <ReactMarkdown 
                         remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}
                         components={{

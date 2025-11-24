@@ -63,25 +63,25 @@ export default function Home() {
 
     return (
         <div className="bg-bg text-text">
-            <div className="flex flex-col items-center sm:flex-row sm:items-start sm:justify-center gap-10 mt-20">
-                <div class="bg-darkblue-300 text-white rounded-xl p-4 flex items-center gap-6 w-fit">
-                    <div class="bg-darkblue-200 text-white px-8 py-6 rounded-xl text-5xl font-bold">
+            <div className="flex flex-col items-center sm:flex-row sm:items-start sm:justify-center gap-6 sm:gap-10 mt-10 sm:mt-20 px-4">
+                <div className="bg-darkblue-300 text-white rounded-xl p-4 flex items-center gap-4 sm:gap-6 w-full sm:w-fit">
+                    <div className="bg-darkblue-200 text-white px-6 sm:px-8 py-4 sm:py-6 rounded-xl text-4xl sm:text-5xl font-bold">
                         {curTime.hour}:{curTime.minute}:{curTime.second}
                     </div>
-                    <div class="flex flex-col items-center leading-tight gap-2 font-mono">
-                        <span class="text-md">{curTime.dayOfWeek}</span>
-                        <span class="text-2xl font-semibold text-[#EBBD65]">{curTime.day}</span>
-                        <span class="text-md">{curTime.month}</span>
+                    <div className="flex flex-col items-center leading-tight gap-1 sm:gap-2 font-mono text-sm sm:text-base">
+                        <span className="text-md">{curTime.dayOfWeek}</span>
+                        <span className="text-2xl font-semibold text-[#EBBD65]">{curTime.day}</span>
+                        <span className="text-md">{curTime.month}</span>
                     </div>
                 </div>
                 <Moveclock />
             </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto mt-12 px-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto mt-12 px-4">
                 {/*TODO: probably add icons*/}
                 {categories && categories.map(c => <Card key={c.id} category={c} handleClick={gotoDir}/>)}
             </div>
             
-            {(role == 'admin') && <button className="fixed bottom-6 right-6 w-12 h-12 text-xl font-bold rounded-full bg-black text-white hover:bg-bg transition" onClick={() => openModal()}> + </button>}
+            {(role == 'admin') && <button className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-10 h-10 sm:w-12 sm:h-12 text-lg sm:text-xl font-bold rounded-full bg-black text-white hover:bg-bg transition" onClick={() => openModal()}> + </button>}
         </div>
     )
 }

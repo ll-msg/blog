@@ -19,18 +19,17 @@ export default function Clock() {
     const hourDeg = (hours % 12) * 30 + minutes * 0.5;
 
     return (
-        <div className="relative w-40 h-40 sm:w-30 sm:h-30 rounded-full border-2 border-text-soft flex items-center justify-center bg-bg-soft/40 shadow-lg">
-
+        <div className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-full border-2 border-text-soft flex items-center justify-center bg-bg-soft/40 shadow-lg">
             <div
-                className="absolute w-1.5 h-8 bg-white rounded origin-bottom top-1/2 left-1/2"
+                className="absolute w-1.5 h-7 sm:h-8 bg-white rounded origin-bottom top-1/2 left-1/2"
                 style={{ transform: `translate(-50%, -100%) rotate(${hourDeg}deg)` }}
             />
             <div
-                className="absolute w-1 h-11 bg-white rounded origin-bottom top-1/2 left-1/2"
+                className="absolute w-1 h-10 sm:h-11 bg-white rounded origin-bottom top-1/2 left-1/2"
                 style={{ transform: `translate(-50%, -100%) rotate(${minuteDeg}deg)` }}
             />
             <div
-                className="absolute w-0.5 h-13 bg-red-400 rounded origin-bottom top-1/2 left-1/2"
+                className="absolute w-0.5 h-12 sm:h-14 bg-red-400 rounded origin-bottom top-1/2 left-1/2"
                 style={{ transform: `translate(-50%, -100%) rotate(${secondDeg}deg)` }}
             />
             <div className="w-2 h-2 bg-red-400 rounded-full z-50"></div>
