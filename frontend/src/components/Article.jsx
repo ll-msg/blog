@@ -68,7 +68,7 @@ export default function Article() {
 
     return (
         <div>
-            <button className="fixed top-3 left-3 sm:top-4 sm:left-4 z-50 bg-bg border border-border rounded-md px-3 py-1 shadow hover:bg-darkblue-400" onClick={() => setOpen(true)}>
+            <button className="fixed top-3 left-3 sm:top-4 sm:left-4 z-50 bg-bg border border-border rounded-md px-3 py-1 shadow hover:bg-bg-hover" onClick={() => setOpen(true)}>
                 ☰
             </button>
             <CategorySideBar open={open} onClose={() => setOpen(false)} article={article?.id}/>

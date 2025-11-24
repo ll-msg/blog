@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -50,16 +52,28 @@
   --color-darkblue-border:  #475569;
 }
 
-@variant dark {
-  :root {
-    --color-bg:             #000000;
-    --color-bg-soft:        #111111;
-    --color-bg-hover:       #161616;
-    --color-border:         #222222;
-    --color-text:           #E5E5E5;
-    --color-text-soft:      #999999;
-  }
+:root.dark,
+.dark:root,
+.dark {
+  --color-bg:             #000000;
+  --color-bg-soft:        #0A0A0A;
+  --color-bg-hover:       #111111;
+
+  --color-border:         #1A1A1A;
+
+  --color-text:           #FFFFFF;
+  --color-text-soft:      #C7C7C7;
+
+  --tw-prose-body:        #E5E5E5;
+  --tw-prose-headings:    #FFFFFF;
+  --tw-prose-bold:        #FFFFFF;
+  --tw-prose-links:       #93C5FD;
+  --tw-prose-code:        #FFFFFF;
+  --tw-prose-bullets:     #A3A3A3;
+  --tw-prose-quotes:      #AAAAAA;
+  --tw-prose-quote-borders: #333333;
 }
+
 
 @layer utilities {
   .prose-darkblue {

@@ -46,7 +46,7 @@ export default function Search() {
     }
     
     return (
-        <div className="min-h-screen bg-darkblue-50 text-darkblue-900 px-4 py-12">
+        <div className="min-h-screen bg-bg text-darkblue-900 px-4 py-12">
             {articles && articles.length > 0 ? articles.map(a => {
                 const plainText = stripMarkdown(a.snippet);
                 const highlighted = highlight(plainText, input);
