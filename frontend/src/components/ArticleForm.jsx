@@ -55,7 +55,7 @@ export default function ArticleForm({ mode = "create", article = null }) {
           await apiCall("PUT", `${API_BASE}/article/${article.id}`, {
           title,
           content,
-          categoryName: originalCategory?.name
+          categoryName: originalCategory?.name || article.categoryName
         });
         alert("Your article has been successfully updated!");
         navigate('/');

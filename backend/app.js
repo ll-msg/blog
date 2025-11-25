@@ -228,15 +228,24 @@ app.get('/article/:articleId', async function(req, res) {
   }
 })
 
-//TODO: allow category update
+// find category
+async function findCategoryId(categoryName) {
+  const result = await pool.query(
+    'SELECT id FROM categories WHERE LOWER(name) = LOWER($1)',
+    [categoryName]
+  );
+  return result.rows[0].id;
+}
+
 app.put('/article/:articleId', async function(req, res) {
   try{
     const articleId = req.params.articleId
-    const {title, content} = req.body;
+    const {title, content, categoryName} = req.body;
+    const categoryId = await findCategoryId(categoryName);
     const result = await pool.query(`
-      UPDATE articles SET title = $1, body = $2 WHERE id = $3
+      UPDATE articles SET title = $1, body = $2, category_id = $3 WHERE id = $4
       RETURNING *
-    `, [title, content, articleId]);
+    `, [title, content, categoryId, articleId]);
     res.json(result.rows[0]);
   } catch(err) {
     console.log(err);
