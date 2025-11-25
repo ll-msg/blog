@@ -34,7 +34,6 @@ export default function Home() {
         navigate(`/content/create`)
     }
 
-
     const updateTime = () => {
         const now = new Date();
         // progress
@@ -78,6 +77,7 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto mt-12 px-4">
                 {/*TODO: probably add icons*/}
+                {!categories && [...Array(5)].map((_, i) => (<div key={i} className="animate-pulse h-32 bg-bg-soft rounded-xl"/>))}
                 {categories && categories.map(c => <Card key={c.id} category={c} handleClick={gotoDir}/>)}
             </div>
             
