@@ -11,7 +11,8 @@ import { pool } from './db.js';
 const allowedOrigins = [
   "http://localhost:5173",
   "https://blog.vercel.app",
-  /\.vercel\.app$/
+  /\.vercel\.app$/,
+  "https://wangyanran.com"
 ];
 
 
@@ -82,7 +83,7 @@ app.get('/health', (req, res) => {
  */
 app.get('/auth/github', passport.authenticate('github'));
 app.get('/auth/github/callback', 
-  passport.authenticate('github', { failureRedirect: `https://blog-five-drab-79.vercel.app/`, session: false }),
+  passport.authenticate('github', { failureRedirect: `https://wangyanran.com/`, session: false }),
   function(req, res) {
     // Successful authentication, redirect home.
     const userInfo = req.user;
@@ -123,8 +124,47 @@ app.get('/auth/github/callback',
       path: '/token/refresh', //Fixme: fix path
       maxAge: 7*24*60*60*1000
     })
-    res.redirect(`https://blog-five-drab-79.vercel.app/`); // back to home page with token
+    res.redirect(`https://wangyanran.com/`); // back to home page with token
 });
+
+// refresh token
+app.get('/token/refresh', async(req, res) => {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) return res.status(401).json({ error: "No refresh token" });
+    
+    // verify token
+    jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, async(err, payload) => {
+      if (err) return res.status(403).json({ error: "Invalid refresh token" });
+      const result = await pool.query('SELECT * FROM users WHERE github_id = $1', [
+        payload.github_id
+      ]);
+      const userInfo = result.rows[0];
+      if (!user) return res.status(404).json({ error: "User not found" });
+      
+      // issue new access token
+      const newAccessToken = jwt.sign(
+        {
+          github_id: userInfo.github_id,
+          username: userInfo.username,
+          role: userInfo.role,
+          avatar: userInfo.avatar
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: '30m' }
+      );
+      res.cookie('accessToken', newAccessToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+        maxAge: 30 * 60 * 1000
+      });
+    })
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+})
 
 // check log in status
 app.get('/logged', (req, res, next) => {

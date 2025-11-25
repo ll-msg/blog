@@ -43,7 +43,7 @@ export default function Layout({children}) {
         window.location.href = `${API_BASE}/auth/github`;
     };
     const handleHome = () => {
-        window.location.href = `/`;
+        navigate('/');;
     };
 
     // search
