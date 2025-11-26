@@ -8,6 +8,39 @@ import rehypeRaw from "rehype-raw";
 import CategorySideBar from "./CategorySideBar";
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { atomOneDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { unified } from "unified";
+import remarkParse from "remark-parse";
+import { visit } from "unist-util-visit";
+import rehypeSlug from "rehype-slug";
+
+function generateToc(markdown) {
+    if (!markdown) return [];
+
+    const tree = unified()
+        .use(remarkParse)
+        .use(remarkGfm)
+        .parse(markdown);
+
+    const toc = [];
+
+    visit(tree, "heading", (node) => {
+        if (node.depth >= 1 && node.depth <= 3) {
+            const text = node.children
+                .filter((c) => c.type === "text" || c.type === "inlineCode")
+                .map((c) => c.value)
+                .join("");
+
+            const id = text
+                .toLowerCase()
+                .replace(/[^\w]+/g, "-")
+                .replace(/(^-|-$)/g, "");
+
+            toc.push({ id, value: text });
+        }
+    });
+
+    return toc;
+}
 
 export default function Article() {
     const [article, setArticle] = useState(null);
@@ -73,59 +106,72 @@ export default function Article() {
             </button>
             <CategorySideBar open={open} onClose={() => setOpen(false)} article={article?.id}/>
             {open && (<div className="fixed inset-0 bg-bg-soft/40 z-40"/>)}
-            <div className="max-w-3xl mx-auto space-y-8 mb-20 px-4 sm:px-0">
-                <header className="border-b border-border pb-4 mt-10">
-                    <div className="flex flex-col sm:flex-row justify-between gap-2 mt-3 text-sm text-darkblue-800 mb-3">
-                        {prev ? <button onClick={() => navigate(`/article/${prev.id}`)} className="hover:text-white cursor-pointer">← {prev.title}</button> : <span />}
-                        {next ? <button onClick={() => navigate(`/article/${next.id}`)} className="hover:text-white cursor-pointer">{next.title} →</button> : <span />}
-                    </div>
-                    <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">{article?.title}</h2>
-                    {role === "admin" && (
-                        <div className="flex items-center gap-2 mt-5 flex-wrap">
-                            <button onClick={startUpdate} className="px-3 py-1.5 text-sm font-medium border border-border rounded-md text-text-soft hover:bg-bg-soft transition"> Edit </button>
-                            <button 
-                                onClick={() => {
-                                    if (window.confirm("Delete this article?")) startDelete();
-                                }}
-                                className="px-3 py-1.5 text-sm font-medium border border-red-400 text-red-600 rounded-md hover:bg-red-50 transition"
-                            >
-                                Delete
-                            </button>
+            
+            <div className="flex flex-col lg:flex-row gap-10 mx-auto px-4 sm:px-0 max-w-7xl">
+                <div className="flex-1 max-w-3xl mx-auto space-y-8 mb-20">
+                    <header className="border-b border-border pb-4 mt-10">
+                        <div className="flex flex-col sm:flex-row justify-between gap-2 mt-3 text-sm text-darkblue-800 mb-3">
+                            {prev ? <button onClick={() => navigate(`/article/${prev.id}`)} className="hover:text-white cursor-pointer">← {prev.title}</button> : <span />}
+                            {next ? <button onClick={() => navigate(`/article/${next.id}`)} className="hover:text-white cursor-pointer">{next.title} →</button> : <span />}
                         </div>
-                    )}
-                </header>
-                
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mt-2 text-sm text-darkblue-500">
-                    <p>Last modified: {new Date(article?.created_at).toLocaleDateString()}</p>
-                    <span className="inline-flex items-center gap-1 text-sm text-darkblue-500">{<FaEye />} {article?.views}</span>
-                </div>
+                        <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">{article?.title}</h2>
+                        {role === "admin" && (
+                            <div className="flex items-center gap-2 mt-5 flex-wrap">
+                                <button onClick={startUpdate} className="px-3 py-1.5 text-sm font-medium border border-border rounded-md text-text-soft hover:bg-bg-soft transition"> Edit </button>
+                                <button 
+                                    onClick={() => {
+                                        if (window.confirm("Delete this article?")) startDelete();
+                                    }}
+                                    className="px-3 py-1.5 text-sm font-medium border border-red-400 text-red-600 rounded-md hover:bg-red-50 transition"
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        )}
+                    </header>
+                    
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mt-2 text-sm text-darkblue-500">
+                        <p>Last modified: {new Date(article?.created_at).toLocaleDateString()}</p>
+                        <span className="inline-flex items-center gap-1 text-sm text-darkblue-500">{<FaEye />} {article?.views}</span>
+                    </div>
 
-                <article className="prose prose-sm sm:prose-base prose-darkblue max-w-none border-t border-darkblue-200 pt-4">
-                    <ReactMarkdown 
-                        remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}
-                        components={{
-                            code({node, inline, className, children, ...props}) {
-                                const match = /language-(\w+)/.exec(className || "");
-                                if (!inline && match) {
+                    <article className="prose prose-sm sm:prose-base prose-darkblue max-w-none border-t border-darkblue-200 pt-4">
+                        <ReactMarkdown 
+                            remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw, rehypeSlug]}
+                            components={{
+                                code({node, inline, className, children, ...props}) {
+                                    const match = /language-(\w+)/.exec(className || "");
+                                    if (!inline && match) {
+                                        return (
+                                            <div className="code-block-wrapper">
+                                            <SyntaxHighlighter style={atomOneDark} language={match[1]} PreTag="pre">
+                                                {String(children).replace(/\n$/, "")}
+                                            </SyntaxHighlighter>
+                                            </div>
+                                        );
+                                    }
                                     return (
-                                        <div className="code-block-wrapper">
-                                        <SyntaxHighlighter style={atomOneDark} language={match[1]} PreTag="pre">
-                                            {String(children).replace(/\n$/, "")}
-                                        </SyntaxHighlighter>
-                                        </div>
+                                        <code className={className} {...props}>
+                                            {children}
+                                        </code>
                                     );
                                 }
-                                return (
-                                    <code className={className} {...props}>
-                                        {children}
-                                    </code>
-                                );
-                            }
-                        }}
-                    >
-                        {article?.body?.replace(/\\n/g, '\n')}
-                    </ReactMarkdown>
-                </article>
+                            }}
+                        >
+                            {article?.body?.replace(/\\n/g, '\n')}
+                        </ReactMarkdown>
+                    </article>
+                </div>
+                <aside className="hidden xl:block w-40 shrink-0 sticky top-24 h-max border-l border-border pl-6">
+                    <h3 className="text-text text-sm font-semibold mb-3">On this page</h3>
+                    <ul className="space-y-2 text-sm">
+                        {generateToc(article?.body?.replace(/\\n/g, '\n')).map(item => (
+                            <li key={item.id} className="ml-3">
+                                <a href={`#${item.id}`} className="text-text hover:text-white">{item.value}</a>
+                            </li>
+                        ))}
+                    </ul>
+                </aside>
             </div>
         </div>
     );
