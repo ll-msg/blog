@@ -36,6 +36,9 @@
   scroll-margin-top: 80px;
 }
 
+.code-block-wrapper pre {
+  font-size: 1rem !important;
+}
 
 @theme {
   --color-bg:             var(--color-darkblue-100);
