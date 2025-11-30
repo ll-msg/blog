@@ -1,17 +1,15 @@
 import { apiCall, API_BASE } from "./Helper";
 import { useEffect, useState } from 'react';
-import ReactMarkdown from "react-markdown";
 import { useNavigate } from 'react-router-dom';
 import { FaEye } from "react-icons/fa";
-import remarkGfm from 'remark-gfm'
-import rehypeRaw from "rehype-raw";
 import CategorySideBar from "./CategorySideBar";
-import SyntaxHighlighter from 'react-syntax-highlighter';
-import { atomOneDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { unified } from "unified";
-import remarkParse from "remark-parse";
 import { visit } from "unist-util-visit";
-import rehypeSlug from "rehype-slug";
+import CodeBlock from "./CodeBlock";
+import remarkGfm from 'remark-gfm'
+import remarkParse from 'remark-parse';
+
+
 
 function generateToc(markdown) {
     if (!markdown) return [];
@@ -48,6 +46,7 @@ export default function Article() {
     const [open, setOpen] = useState(false);
     const [prev, setPrev] = useState(null);
     const [next, setNext] = useState(null);
+    const [activeToc, setActiveToc] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -98,7 +97,6 @@ export default function Article() {
         });
     }, [article]);
 
-
     return (
         <div>
             <button className="fixed top-3 left-3 sm:top-4 sm:left-4 z-50 bg-bg border border-border rounded-md px-3 py-1 shadow hover:bg-bg-hover" onClick={() => setOpen(true)}>
@@ -135,39 +133,18 @@ export default function Article() {
                         <span className="inline-flex items-center gap-1 text-sm text-darkblue-500">{<FaEye />} {article?.views}</span>
                     </div>
 
-                    <article className="prose prose-sm sm:prose-base prose-darkblue max-w-none border-t border-darkblue-200 pt-4">
-                        <ReactMarkdown 
-                            remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw, rehypeSlug]}
-                            components={{
-                                code({node, inline, className, children, ...props}) {
-                                    const match = /language-(\w+)/.exec(className || "");
-                                    if (!inline && match) {
-                                        return (
-                                            <div className="code-block-wrapper">
-                                            <SyntaxHighlighter style={atomOneDark} language={match[1]} PreTag="pre">
-                                                {String(children).replace(/\n$/, "")}
-                                            </SyntaxHighlighter>
-                                            </div>
-                                        );
-                                    }
-                                    return (
-                                        <code className={className} {...props}>
-                                            {children}
-                                        </code>
-                                    );
-                                }
-                            }}
-                        >
-                            {article?.body?.replace(/\\n/g, '\n')}
-                        </ReactMarkdown>
+                    <article className="prose prose-sm sm:prose-base prose-darkblue max-w-none min-w-0">
+                        <CodeBlock content={article?.body?.replace(/\\n/g, '\n')}/>
                     </article>
                 </div>
-                <aside className="hidden xl:block w-40 shrink-0 sticky top-24 h-max border-l border-border pl-6">
+                <aside className="hidden xl:block w-fit shrink-0 sticky top-24 h-max border-l border-border pl-6">
                     <h3 className="text-text text-sm font-semibold mb-3">On this page</h3>
                     <ul className="space-y-2 text-sm">
                         {generateToc(article?.body?.replace(/\\n/g, '\n')).map(item => (
                             <li key={item.id} className="ml-3">
-                                <a href={`#${item.id}`} className="text-text hover:text-white">{item.value}</a>
+                                <a href={`#${item.id}`} className={activeToc === `${item.id}` ? "text-[#EBBD65] font-semibold" : "text-text hover:text-white"}
+                                    onClick={() => {setActiveToc(`${item.id}`)}}>{item.value}
+                                </a>
                             </li>
                         ))}
                     </ul>

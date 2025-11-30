@@ -2,6 +2,7 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { FaSearch, FaGithub, FaSun, FaMoon, FaEllipsisV, FaHome } from "react-icons/fa";
 import { apiCall, API_BASE } from "./Helper";
+import { RiInformation2Fill } from "react-icons/ri";
 
 
 export default function Layout({children}) {
@@ -43,8 +44,11 @@ export default function Layout({children}) {
         window.location.href = `${API_BASE}/auth/github`;
     };
     const handleHome = () => {
-        navigate('/');;
+        navigate('/');
     };
+    const handleAbout = () => {
+        navigate('/about')
+    }
 
     // search
     const search = () => {
@@ -91,6 +95,11 @@ export default function Layout({children}) {
                         <button className="flex items-center gap-2 p-2 border border-border rounded-md hover:bg-bg-hover transition" onClick={() => { setMobileActions(false); handleHome(); }}>
                             <FaHome /> Home
                         </button>
+
+                        <button className="flex items-center gap-2 p-2 border border-border rounded-md hover:bg-bg-hover transition" onClick={() => { handleAbout(); }}>
+                            <RiInformation2Fill /> About Me
+                        </button>
+                        
                         {!loggedIn && (
                             <button className="flex items-center gap-2 p-2 border border-border rounded-md hover:bg-bg-hover transition" onClick={() => { setMobileActions(false); handleLogin(); }}>
                                 <FaGithub /> Login with GitHub

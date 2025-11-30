@@ -48,7 +48,6 @@ export default function Directory() {
                         </p>
                     </div>
                 )}
-                {/*TODO: need auto fill category, think need restructure the route */}
                 {(role == 'admin') && <button className="fixed bottom-6 right-6 w-12 h-12 text-xl font-bold rounded-full bg-black text-white hover:bg-darkblue-800 transition" onClick={() => openModal()}> + </button>}
             </div>
         </div>

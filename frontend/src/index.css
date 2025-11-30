@@ -40,6 +40,18 @@
   font-size: 1rem !important;
 }
 
+.code-block-wrapper pre code {
+  white-space: inherit !important;
+}
+
+/* Mobile: allow wrapping */
+@media (max-width: 640px) {
+  .code-block-wrapper pre {
+    white-space: pre-wrap !important;
+    word-break: break-word;
+  }
+}
+
 @theme {
   --color-bg:             var(--color-darkblue-100);
   --color-bg-soft:        var(--color-darkblue-light);

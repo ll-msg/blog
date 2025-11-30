@@ -63,7 +63,7 @@ export default function Home() {
     return (
         <div className="bg-bg text-text">
             <div className="flex flex-col items-center sm:flex-row sm:items-start sm:justify-center gap-6 sm:gap-10 mt-10 sm:mt-20 px-4">
-                <div className="bg-bg-soft text-text rounded-xl p-4 flex items-center gap-4 sm:gap-6 w-full sm:w-fit">
+                <div className="bg-bg-soft text-text rounded-xl p-4 flex items-center gap-4 sm:gap-6 w-fit">
                     <div className="bg-bg-hover text-text px-6 sm:px-8 py-4 sm:py-6 rounded-xl text-4xl sm:text-5xl font-bold">
                         {curTime.hour}:{curTime.minute}:{curTime.second}
                     </div>

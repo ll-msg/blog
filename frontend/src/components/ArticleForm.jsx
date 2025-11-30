@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import ReactMarkdown from "react-markdown";
 import { apiCall, API_BASE } from "./Helper";
 import { useNavigate } from 'react-router-dom';
-import remarkGfm from 'remark-gfm'
-import rehypeRaw from "rehype-raw";
+import CodeBlock from "./CodeBlock";
+
 
 
 export default function ArticleForm({ mode = "create", article = null }) {
@@ -58,7 +57,7 @@ export default function ArticleForm({ mode = "create", article = null }) {
           categoryName: originalCategory?.name || article.categoryName
         });
         alert("Your article has been successfully updated!");
-        navigate('/');
+        navigate(`/article/${article.id}`);
       } catch (err) {
         alert(err);
         return;
@@ -68,7 +67,7 @@ export default function ArticleForm({ mode = "create", article = null }) {
 
   //TODO: need automatic retrieve catoegory
   return (
-    <div className="max-w-3xl mx-auto space-y-6 mb-20">
+    <div className="max-w-7xl mx-auto space-y-6 mb-20">
 
       <h2 className="text-2xl font-semibold border-b border-border pb-3 mt-10">
         {mode === "create" ? "Create Article" : "Update Article"}
@@ -86,13 +85,21 @@ export default function ArticleForm({ mode = "create", article = null }) {
       />
 
       <label className="block text-sm font-medium text-text-softmb-2">Content</label>
-      <textarea className="w-full min-h-[200px] border-b border-border bg-transparent outline-none py-2 text-text resize-y focus:border-black" id="create-markdown-input" value={content} onChange={(e) => setContent(e.target.value)} placeholder="Put your article here in markdown format"/>
-      
-      <h2 className="text-sm font-medium text-text-softmb-2">Preview</h2>
-      <div className="prose prose-darkblue max-w-none border-t border-darkblue-200 pt-4">
-        <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
-          {content}
-        </ReactMarkdown>
+      <div className="flex gap-6">
+        <textarea
+          className="w-1/2 min-h-[400px] border-b border-border bg-transparent outline-none py-2 text-text resize-y focus:border-black"
+          id="create-markdown-input"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          placeholder="Put your article here in markdown format"
+        />
+
+        <div className="w-1/2">
+          <h2 className="text-sm font-medium text-text-soft mb-2">Preview</h2>
+          <div className="prose prose-darkblue max-w-none border-t border-darkblue-200 pt-4">
+            <CodeBlock content={content}/>
+          </div>
+        </div>
       </div>
 
       <div className="flex justify-end">
