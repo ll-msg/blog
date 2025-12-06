@@ -7,7 +7,6 @@ import { Strategy as JwtStrategy} from 'passport-jwt'
 import jwt from 'jsonwebtoken'
 import cookieParser from 'cookie-parser';
 import { pool } from './db.js';
-import fetch from "node-fetch";
 
 const allowedOrigins = [
   "http://localhost:5173",
