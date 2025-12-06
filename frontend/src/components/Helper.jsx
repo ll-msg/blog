@@ -1,10 +1,11 @@
-export async function apiCall(method, url, data=null, setError, errMsg, auth=true) {
-    const headers = {
+export async function apiCall(method, url, data=null, headers = {}, setError = null, errMsg = null, auth=true) {
+    const mergedHeaders = {
         'Content-Type': 'application/json',
+        ...headers
     };
     const body = {
         method,
-        headers,
+        headers: mergedHeaders,
         credentials: 'include'
     };
 

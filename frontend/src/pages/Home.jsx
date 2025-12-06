@@ -23,7 +23,7 @@ export default function Home() {
 
     // logged in page
     useEffect(() => {
-        apiCall('GET', `${API_BASE}/logged`, null, null, "").then(data => {
+        apiCall('GET', `${API_BASE}/logged` ).then(data => {
             if (data) {
                 setRole(data.role);
             }

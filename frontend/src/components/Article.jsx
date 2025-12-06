@@ -8,8 +8,7 @@ import { visit } from "unist-util-visit";
 import CodeBlock from "./CodeBlock";
 import remarkGfm from 'remark-gfm'
 import remarkParse from 'remark-parse';
-
-
+import { RiTranslateAi } from "react-icons/ri";
 
 function generateToc(markdown) {
     if (!markdown) return [];
@@ -52,14 +51,14 @@ export default function Article() {
     useEffect(() => {
         const path = window.location.pathname;
         const id = path.split("/").pop();
-        apiCall('GET', `${API_BASE}/article/${id}`, null, null, "").then(data => {
+        apiCall('GET', `${API_BASE}/article/${id}`).then(data => {
             if (data) setArticle(data);
         })
     }, [window.location.pathname]);
 
     // check logged in
     useEffect(() => {
-        apiCall('GET', `${API_BASE}/logged`, null, null, "").then(data => {
+        apiCall('GET', `${API_BASE}/logged`).then(data => {
             if (data) {
                 setRole(data.role);
             }
@@ -75,7 +74,7 @@ export default function Article() {
         const path = window.location.pathname;
         const id = path.split("/").pop();
         try{
-            apiCall('DELETE', `${API_BASE}/article/${id}`, null, null, "");
+            apiCall('DELETE', `${API_BASE}/article/${id}` );
             alert("You successfully deleted this article!");
             navigate('/');
         } catch(err){
@@ -88,7 +87,7 @@ export default function Article() {
         setPrev(null)
         setNext(null)
         if (!article) return;
-        apiCall("GET", `${API_BASE}/${article.category_id}/directory`, null, null, "")
+        apiCall("GET", `${API_BASE}/${article.category_id}/directory` )
         .then(list => {
             if (!list) return;
             const idx = list.findIndex(a => a.id === article.id);
@@ -96,6 +95,36 @@ export default function Article() {
             if (idx < list.length - 1) setNext(list[idx + 1]);
         });
     }, [article]);
+
+    // get browser language
+    const getTargetLang = () => {
+        const lang = (navigator.language || "en").toLowerCase();  
+        return lang.split("-")[0].toUpperCase();
+    }
+
+    // translate article
+    const handleTranslate = async () => {
+        let targetLang = getTargetLang();
+        try{
+            const response = await apiCall(
+                'POST', 
+                `${API_BASE}/translate`, 
+                {
+                    text: article.body,
+                    target_lang: targetLang
+                }
+            )
+            const translated = response?.translations?.[0]?.text;
+            if (!translated) {
+                alert("Translation failed.");
+                return;
+            } else {
+                setArticle(prev => ({...prev, body: translated}));
+            }
+        } catch(err) {
+            alert(err);
+        }
+    }
 
     return (
         <div>
@@ -112,7 +141,14 @@ export default function Article() {
                             {prev ? <button onClick={() => navigate(`/article/${prev.id}`)} className="hover:text-white cursor-pointer">← {prev.title}</button> : <span />}
                             {next ? <button onClick={() => navigate(`/article/${next.id}`)} className="hover:text-white cursor-pointer">{next.title} →</button> : <span />}
                         </div>
-                        <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">{article?.title}</h2>
+
+                        <div className="flex flex-row">
+                            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">{article?.title}</h2>
+                            <button className="ml-auto flex items-center gap-1 text-xs sm:text-sm border border-border px-1.5 py-1 sm:px-3 sm:py-1.5 rounded hover:bg-bg-soft transition" onClick={handleTranslate}>
+                                <RiTranslateAi /> Translate
+                            </button>
+                        </div>
+
                         {role === "admin" && (
                             <div className="flex items-center gap-2 mt-5 flex-wrap">
                                 <button onClick={startUpdate} className="px-3 py-1.5 text-sm font-medium border border-border rounded-md text-text-soft hover:bg-bg-soft transition"> Edit </button>

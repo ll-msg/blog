@@ -8,7 +8,7 @@ export default function Update() {
     const [article, setArticle] = useState(null);
 
     useEffect(() => {
-        apiCall("GET", `${API_BASE}/article/${articleId}`, null, null, "")
+        apiCall("GET", `${API_BASE}/article/${articleId}` )
         .then(data => setArticle(data));
     }, [articleId]);
 

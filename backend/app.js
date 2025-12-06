@@ -7,6 +7,7 @@ import { Strategy as JwtStrategy} from 'passport-jwt'
 import jwt from 'jsonwebtoken'
 import cookieParser from 'cookie-parser';
 import { pool } from './db.js';
+import fetch from "node-fetch";
 
 const allowedOrigins = [
   "http://localhost:5173",
@@ -319,4 +320,31 @@ app.get('/search', async function(req, res) {
 app.post('/view/increment', async function(req, res) {
   const articleId = req.params.articleId;
   const curView = await pool.query (`SELECT view FROM articles WHERE id = $1`, [articleId]);
+})
+
+/**
+ * Article Translate Route
+ */
+app.post('/translate', async function(req, res) {
+  const { text, target_lang } = req.body;
+  try {
+      const deeplRes = await fetch("https://api-free.deepl.com/v2/translate", {
+          method: "POST",
+          headers: {
+              "Authorization": `DeepL-Auth-Key ${process.env.DEEPL_KEY}`,
+              "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+              text: [text],
+              target_lang
+          })
+      });
+
+      const data = await deeplRes.json();
+      return res.json(data);
+
+  } catch (err) {
+      console.error("DeepL proxy error:", err);
+      return res.status(500).json({ error: "Translation failed." });
+  }
 })

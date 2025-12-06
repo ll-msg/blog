@@ -32,7 +32,7 @@ export default function Layout({children}) {
     // github login
     // JWT token
     useEffect(() => {
-        apiCall('GET', `${API_BASE}/logged`, null, null, "").then(data => {
+        apiCall('GET', `${API_BASE}/logged` ).then(data => {
             if (data && data.role != 'guest') {
                 setLoggedIn(true);
                 setUser(data);

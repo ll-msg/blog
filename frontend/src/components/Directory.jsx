@@ -11,13 +11,13 @@ export default function Directory() {
     useEffect(() => {
         const path = window.location.pathname;
         const id = path.split("/").pop();
-        apiCall('GET', `${API_BASE}/${id}/directory`, null, null, "").then(data => {
+        apiCall('GET', `${API_BASE}/${id}/directory` ).then(data => {
             if (data) setDir(data);
         })
     }, []);
 
     useEffect(() => {
-        apiCall('GET', `${API_BASE}/logged`, null, null, "").then(data => {
+        apiCall('GET', `${API_BASE}/logged` ).then(data => {
             if (data) {
                 setRole(data.role);
             }
