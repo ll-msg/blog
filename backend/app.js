@@ -327,23 +327,32 @@ app.post('/view/increment', async function(req, res) {
 app.post('/translate', async function(req, res) {
   const { text, target_lang } = req.body;
   try {
-      const deeplRes = await fetch("https://api-free.deepl.com/v2/translate", {
-          method: "POST",
-          headers: {
-              "Authorization": `DeepL-Auth-Key ${process.env.DEEPL_KEY}`,
-              "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-              text: [text],
-              target_lang
-          })
-      });
-
-      const data = await deeplRes.json();
-      return res.json(data);
+    const params = new URLSearchParams();
+    params.append("text", text);
+    params.append("target_lang", target_lang);
+    const deeplRes = await fetch("https://api-free.deepl.com/v2/translate", {
+        method: "POST",
+        headers: {
+            "Authorization": `DeepL-Auth-Key ${process.env.DEEPL_KEY}`,
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: params
+    });
+    const raw = await deeplRes.text();
+    let data;
+    try {
+        data = JSON.parse(raw);
+    } catch (e) {
+        console.error("DeepL returned invalid response:", raw);
+        return res.status(500).json({ error: "DeepL returned non-JSON." });
+    }
+    if (!data.translations) {
+        return res.status(400).json({ error: data.message || "DeepL error" });
+    }
+    return res.json({ translated_text: data.translations[0].text });
 
   } catch (err) {
       console.error("DeepL proxy error:", err);
-      return res.status(500).json({ error: "Translation failed." });
+      return res.status(500).json({ error: "Translation failed in backend." });
   }
 })

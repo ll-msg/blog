@@ -114,7 +114,7 @@ export default function Article() {
                     target_lang: targetLang
                 }
             )
-            const translated = response?.translations?.[0]?.text;
+            const translated = response?.translated_text;
             if (!translated) {
                 alert("Translation failed.");
                 return;
