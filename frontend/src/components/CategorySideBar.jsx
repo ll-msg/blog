@@ -1,69 +1,61 @@
-import Sidebar from "./Sidebar";
-import { useCategories } from "./CategoryContext";
-import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from 'react';
-import { AiOutlineRight } from "react-icons/ai";
+import { useNavigate } from 'react-router-dom';
+import { Collapse, Empty, Space, Typography } from 'antd';
+import { useCategories } from './CategoryContext';
+import { pageClass } from '../styles';
 
-export default function CategorySideBar({open, onClose, article}){
-    const { categories } = useCategories();
-    const navigate = useNavigate();
-    const curAid = article;
-    const [openCategoryIds, setOpenCategoryIds] = useState([]);
+const { Text } = Typography;
 
-    // highlight current article
-    useEffect(() => {
-        if (!curAid || categories.length === 0) return;
+export default function CategorySideBar({ article, onNavigate }) {
+  const { categories } = useCategories();
+  const navigate = useNavigate();
+  const [activeKeys, setActiveKeys] = useState([]);
 
-        for (const cat of categories) {
-            if (cat.articles.some(a => a.id === curAid)) {
-                setOpenCategoryIds(prev => prev.includes(cat.id) ? prev : [...prev, cat.id])
-                break;
-            }
-        }
-    }, [curAid, categories]);
+  useEffect(() => {
+    if (!article || categories.length === 0) return;
 
-    return(
-        <Sidebar open={open} onClose={onClose}>
-            <div className="space-y-5">
-                {categories.map(c => {
-                    const isOpen = openCategoryIds.includes(c.id);
-                    return (
-                        <div key={c.id} className="space-y-2">
-                            <button
-                                onClick={() => setOpenCategoryIds(prev => prev.includes(c.id) ? prev.filter(id => id !== c.id) : [...prev, c.id])}
-                                className="w-full text-left text-sm font-semibold text-text-soft border-b border-border pb-1 hover:text-white transition"
-                            >   
-                                <span className="flex items-center whitespace-nowrap overflow-hidden text-ellipsis text-sm">
-                                    {c.name}
-                                    <AiOutlineRight
-                                        className={`ml-auto transform transition-transform duration-300 ${
-                                            isOpen ? "rotate-90" : ""
-                                        }`}
-                                        size={15}
-                                    />
-                                </span>
-                                
-                            </button>
+    for (const category of categories) {
+      if (category.articles.some((entry) => entry.id === article)) {
+        setActiveKeys((prev) => (prev.includes(String(category.id)) ? prev : [...prev, String(category.id)]));
+        break;
+      }
+    }
+  }, [article, categories]);
 
-                            {isOpen && (
-                                <div className="ml-2 flex flex-col space-y-1.5">
-                                    {c.articles.map(a => {
-                                        const active = a.id === curAid;
-                                        return (
-                                            <button key={a.id} 
-                                                className={`text-left text-sm rounded px-2 py-1 transition-all ${active ? "bg-darkblue-500/40 text-white font-medium" : "text-text hover:text-white hover:bg-darkblue-500/20"}`}
-                                                onClick={() => {onClose(); navigate(`/article/${a.id}`);
-                                            }}>
-                                                {a.title}
-                                            </button>
-                                        )
-                                    })}
-                                </div>
-                            )}
-                        </div>
-                    )
-                })}
-            </div>
-        </Sidebar>
-    )
+  if (categories.length === 0) {
+    return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="No categories yet" />;
+  }
+
+  return (
+    <Collapse
+      ghost
+      activeKey={activeKeys}
+      onChange={(keys) => setActiveKeys(Array.isArray(keys) ? keys : [keys])}
+      items={categories.map((category) => ({
+        key: String(category.id),
+        label: <Text strong>{category.name}</Text>,
+        children: (
+          <Space orientation="vertical" size={8} className={pageClass}>
+            {category.articles.map((entry) => {
+              const active = entry.id === article;
+              return (
+                <a
+                  key={entry.id}
+                  href={`#/article/${entry.id}`}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    navigate(`/article/${entry.id}`);
+                    onNavigate?.();
+                  }}
+                  className={`${active ? 'font-bold text-[#111111]' : 'font-normal text-[#595959]'} no-underline transition-colors hover:text-[#111111]`}
+                >
+                  {entry.title}
+                </a>
+              );
+            })}
+          </Space>
+        ),
+      }))}
+    />
+  );
 }

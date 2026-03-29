@@ -1,110 +1,137 @@
-import { useEffect, useState } from "react";
-import { apiCall, API_BASE } from "./Helper";
+import { Button, Card, Flex, Input, Select, Space, Typography } from 'antd';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import CodeBlock from "./CodeBlock";
+import CodeBlock from './CodeBlock';
+import { apiCall, API_BASE } from './Helper';
+import {
+  brandClass,
+  buttonClass,
+  cardClass,
+  compactHeroTitleClass,
+  editorGridClass,
+  heroCopyClass,
+  inputClass,
+  markdownClass,
+  pageClass,
+} from '../styles';
 
+const { TextArea } = Input;
+const { Paragraph, Text, Title } = Typography;
 
-
-export default function ArticleForm({ mode = "create", article = null }) {
-  const [title, setTitle] = useState(article?.title || "");
-  const [content, setContent] = useState(article?.body || "");
+export default function ArticleForm({ mode = 'create', article = null }) {
+  const [title, setTitle] = useState(article?.title || '');
+  const [content, setContent] = useState(article?.body || '');
   const [categories, setCategories] = useState(null);
   const navigate = useNavigate();
 
   const clearCategoryName = (name) => name?.trim().toLowerCase();
-  const [categoryName, setCategoryName] = useState(clearCategoryName(article?.categoryName || ""));
+  const [categoryName, setCategoryName] = useState(clearCategoryName(article?.categoryName || ''));
 
   useEffect(() => {
-    apiCall('GET', `${API_BASE}/categories`).then(data => {
+    apiCall('GET', `${API_BASE}/categories`).then((data) => {
       if (data) setCategories(data);
-    })
+    });
   }, []);
 
-  const originalCategory = categories?.find(
-    c => clearCategoryName(c.name) === categoryName
-  );
- 
-  const onSubmit = async() => {
-    /**
-     * 2. upload to database
-     * 3. alert uploaded successful
-     */
+  const originalCategory = categories?.find((category) => clearCategoryName(category.name) === categoryName);
+
+  const onSubmit = async () => {
     if (!title || !content || !categoryName) {
-      alert("Please fill in all the fields");
+      alert('Please fill in all the fields');
       return;
     }
-    
-    if (mode === "create") {
-      try{
-          await apiCall("POST", `${API_BASE}/article/create`, {
-          title,
-          content,
-          userId: 1,
-          createdAt: new Date().toISOString(),
-          categoryName: originalCategory?.name
-        });
-        alert("Your article has been successfully uploaded!");
+
+    if (mode === 'create') {
+      const result = await apiCall('POST', `${API_BASE}/article/create`, {
+        title,
+        content,
+        userId: 1,
+        createdAt: new Date().toISOString(),
+        categoryName: originalCategory?.name,
+      });
+
+      if (result !== null) {
+        alert('Your article has been successfully uploaded!');
         navigate('/');
-      } catch(err) {
-        alert(err);
-        return;
       }
-    } else if (mode === "update") {
-      try{
-          await apiCall("PUT", `${API_BASE}/article/${article.id}`, {
-          title,
-          content,
-          categoryName: originalCategory?.name || article.categoryName
-        });
-        alert("Your article has been successfully updated!");
-        navigate(`/article/${article.id}`);
-      } catch (err) {
-        alert(err);
-        return;
-      }
+      return;
     }
-  }
 
-  //TODO: need automatic retrieve catoegory
+    const result = await apiCall('PUT', `${API_BASE}/article/${article.id}`, {
+      title,
+      content,
+      categoryName: originalCategory?.name || article.categoryName,
+    });
+
+    if (result !== null) {
+      alert('Your article has been successfully updated!');
+      navigate(`/article/${article.id}`);
+    }
+  };
+
   return (
-    <div className="max-w-7xl mx-auto space-y-6 mb-20">
+    <Space orientation="vertical" size={28} className={pageClass}>
+      <section>
+        <Text className={brandClass}>Editor</Text>
+        <Title className={compactHeroTitleClass}>
+          {mode === 'create' ? 'Create a new article.' : 'Revise this article.'}
+        </Title>
+        <Paragraph className={heroCopyClass}>
+          The editor now leans on Ant Design inputs and cards so the structure stays simple while markdown remains the focus.
+        </Paragraph>
+      </section>
 
-      <h2 className="text-2xl font-semibold border-b border-border pb-3 mt-10">
-        {mode === "create" ? "Create Article" : "Update Article"}
-      </h2>
-      
-      <label className="block text-sm font-medium text-text-softmb-2"> Select Field</label>
-      <select  className="w-full border-b border-border bg-transparent outline-none py-2 text-text focus:border-black" value={categoryName} onChange={(e) => setCategoryName(clearCategoryName(e.target.value))}>
-          <option value="">--Please choose a field--</option>
-          {categories && categories.map(c => (<option key={c.id} value={clearCategoryName(c.name)}>{c.name}</option>))}
-      </select>
-
-      <label className="block text-sm font-medium text-text-softmb-2">Title</label>
-      <input type="text" className="w-full border-b border-border bg-transparent outline-none py-1 text-darkblue-00 focus:border-black" id="create-title" value={title} onChange={(e) => setTitle(e.target.value)}
-        placeholder="Enter your article title"
-      />
-
-      <label className="block text-sm font-medium text-text-softmb-2">Content</label>
-      <div className="flex gap-6">
-        <textarea
-          className="w-1/2 min-h-[400px] border-b border-border bg-transparent outline-none py-2 text-text resize-y focus:border-black"
-          id="create-markdown-input"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="Put your article here in markdown format"
-        />
-
-        <div className="w-1/2">
-          <h2 className="text-sm font-medium text-text-soft mb-2">Preview</h2>
-          <div className="prose prose-darkblue max-w-none border-t border-darkblue-200 pt-4">
-            <CodeBlock content={content}/>
+      <Card className={cardClass}>
+        <Space orientation="vertical" size={18} className={pageClass}>
+          <div>
+            <Text className={brandClass}>Category</Text>
+            <Select
+              className={`${inputClass} !mt-2 !w-full`}
+              placeholder="Select a category"
+              value={categoryName || undefined}
+              options={categories?.map((category) => ({
+                label: category.name,
+                value: clearCategoryName(category.name),
+              })) || []}
+              onChange={(value) => setCategoryName(value)}
+            />
           </div>
-        </div>
+
+          <div>
+            <Text className={brandClass}>Title</Text>
+            <Input
+              className={`${inputClass} !mt-2`}
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
+              placeholder="Enter your article title"
+            />
+          </div>
+        </Space>
+      </Card>
+
+      <div className={editorGridClass}>
+        <Card className={cardClass} title="Markdown">
+          <TextArea
+            autoSize={{ minRows: 18 }}
+            className="[&.ant-input]:rounded-[24px]"
+            value={content}
+            onChange={(event) => setContent(event.target.value)}
+            placeholder="Write your article in markdown"
+          />
+        </Card>
+
+        <Card className={cardClass} title="Preview">
+          <div className={markdownClass}>
+            <CodeBlock content={content} />
+          </div>
+        </Card>
       </div>
 
-      <div className="flex justify-end">
-        <button className="px-6 py-2 border border-darkblue-800 text-darkblue-900 rounded-md hover:bg-darkblue-900 hover:text-white transition" onClick={onSubmit}>{mode === "create" ? "Upload" : "Update"}</button>
-      </div>
-    </div>
+      <Flex justify="flex-end">
+        <Button type="primary" size="large" className={buttonClass} onClick={onSubmit}>
+          {mode === 'create' ? 'Publish article' : 'Save changes'}
+        </Button>
+      </Flex>
+    </Space>
   );
 }

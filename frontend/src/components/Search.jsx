@@ -1,66 +1,84 @@
-import { useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { apiCall, API_BASE } from "./Helper";
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+import { Empty, List, Space, Typography } from 'antd';
+import { apiCall, API_BASE } from './Helper';
+import {
+  brandClass,
+  compactHeroTitleClass,
+  emptyClass,
+  heroCopyClass,
+  listClass,
+  pageClass,
+} from '../styles';
+
+const { Paragraph, Text, Title } = Typography;
 
 function stripMarkdown(markdown) {
   return markdown
-    .replace(/[#_*>\-\[\]()`]/g, "")
-    .replace(/!\[.*?\]\(.*?\)/g, "")
-    .replace(/\[(.*?)\]\(.*?\)/g, "$1")
-    .replace(/\n+/g, " ")
+    .replace(/[#_*>\-\[\]()`]/g, '')
+    .replace(/!\[.*?\]\(.*?\)/g, '')
+    .replace(/\[(.*?)\]\(.*?\)/g, '$1')
+    .replace(/\n+/g, ' ')
     .trim();
+}
+
+function escapeRegex(input) {
+  return input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 function highlight(text, keyword) {
   if (!keyword) return text;
-  const regex = new RegExp(`(${keyword})`, "gi");
-  return text.replace(regex, "<strong class='text-white font-semibold'>$1</strong>");
+  const regex = new RegExp(`(${escapeRegex(keyword)})`, 'gi');
+  return text.replace(regex, "<mark class='rounded bg-[#111111] px-1 text-white'>$1</mark>");
 }
 
 export default function Search() {
-    const [searchParams] = useSearchParams();
-    const input = searchParams.get("q");
-    const [articles, setArticles] = useState([]);
-    const [no, setNo] = useState("");
-    const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get('q') || '';
+  const [articles, setArticles] = useState([]);
+  const [loaded, setLoaded] = useState(false);
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        try{
-            apiCall('GET', `${API_BASE}/search?q=${encodeURIComponent(input)}`).then(data => {
-                console.log("searching...")
-                if (data && data.length > 0) {
-                    setArticles(data);
-                } else {
-                    setArticles([]);
-                    setNo("Sorry there's nothing here yet :(");
-                }
-            });
-        } catch(err) {
-            console.log(err);
-        }
-    }, [input])
+  useEffect(() => {
+    setLoaded(false);
+    apiCall('GET', `${API_BASE}/search?q=${encodeURIComponent(query)}`).then((data) => {
+      setArticles(data || []);
+      setLoaded(true);
+    });
+  }, [query]);
 
-    const openArticle = (id) => {
-        navigate(`/article/${id}`)
-    }
-    
-    return (
-        <div className="min-h-screen bg-bg text-darkblue-900 px-4 py-12">
-            {articles && articles.length > 0 ? articles.map(a => {
-                const plainText = stripMarkdown(a.snippet);
-                const highlighted = highlight(plainText, input);
-                return (
-                    <div key={a.id} className="cursor-pointer border border-border rounded-lg bg-bg-soft p-6 hover:border-black hover:shadow-sm transition mb-4" onClick={() => openArticle(a.id)}>
-                        <h3 className="text-lg font-semibold text-darkblue-600 mb-2" dangerouslySetInnerHTML={{ __html: highlight(a.title, input) }} />
-                        <p className="text-sm text-darkblue-600 leading-relaxed" dangerouslySetInnerHTML={{ __html: highlighted }} />
-                    </div>
-                );
-            }) : (no && <div className="flex flex-col items-center justify-center mt-20 text-darkblue-500 italic">
-                            <p className="text-darkblue-500 italic mt-4">
-                                {no}
-                            </p>
-                        </div>)}
+  return (
+    <Space orientation="vertical" size={28} className={pageClass}>
+      <section>
+        <Title className={compactHeroTitleClass}>
+          Results for "{query}"
+        </Title>
+      </section>
+
+      {loaded && articles.length > 0 ? (
+        <List
+          className={listClass}
+          dataSource={articles}
+          renderItem={(article) => {
+            const plainText = stripMarkdown(article.snippet || article.body || '');
+            const highlighted = highlight(plainText, query);
+            return (
+              <List.Item className="cursor-pointer" onClick={() => navigate(`/article/${article.id}`)}>
+                <List.Item.Meta
+                  title={<div className="m-0 text-[1.125rem] font-semibold tracking-[-0.03em] text-[#111111]" dangerouslySetInnerHTML={{ __html: highlight(article.title, query) }} />}
+                  description={<p className="mb-0 text-[#8c8c8c]" dangerouslySetInnerHTML={{ __html: highlighted }} />}
+                />
+              </List.Item>
+            );
+          }}
+        />
+      ) : loaded ? (
+        <div className={emptyClass}>
+          <Empty description="No matching posts yet." />
         </div>
-    );
+      ) : (
+        <Text type="secondary">Searching the blog...</Text>
+      )}
+    </Space>
+  );
 }

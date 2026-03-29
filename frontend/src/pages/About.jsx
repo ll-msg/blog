@@ -1,37 +1,65 @@
-import { IoMailSharp } from "react-icons/io5";
-import { FaGithub } from "react-icons/fa";
+import { Button, Card, Space, Typography } from 'antd';
+import { FaGithub } from 'react-icons/fa';
+import { IoMailSharp } from 'react-icons/io5';
+import {
+  brandClass,
+  buttonClass,
+  cardClass,
+  compactHeroTitleClass,
+  heroCopyClass,
+  pageClass,
+} from '../styles';
+
+const { Link, Paragraph, Text, Title } = Typography;
 
 export default function About() {
-    return (
-      <div className="max-w-2xl mx-auto px-6 py-12 text-left">
-        <h1 className="text-3xl font-bold mb-6">About</h1>
-        <p className="text-md leading-relaxed mb-6">
-          Hello! <br />
-          I'm <span className="font-semibold">Yanran Wang</span>, a passionate learner who enjoys exploring everything. <br />
-          Also:
-        </p>
-        <ul className="list-disc list-inside space-y-2 text-text mb-6">
-          <li>Artificial Unintelligence</li>
-          <li>Game Enthusiast</li>
-          <li>Quick Learner</li>
-        </ul>
-        <p className="text-md text-text mb-8">
-          currently studying at <a className="font-medium cursor-pointer text-text hover:text-blue-600" target="_blank" href="https://www.unsw.edu.au/">UNSW</a>.
-        </p>
-  
-        <p className="text-text mb-12">
-          This blog was created in 2025 as a small React project and now also serves as my digital study notebook.
-        </p>
-  
-        <h1 className="text-3xl font-bold mb-4">Contact Me</h1>
-  
-        <a href="https://github.com/ll-msg" target="_blank" rel="noopener noreferrer" className="text-text flex items-center gap-2 hover:text-blue-600">
-            <FaGithub /> Github: ll-msg 
-        </a>
-        <a href="mailto:wyr20031104@gmail.com" className="text-text flex items-center gap-2 mt-2 hover:text-blue-600">
-            <IoMailSharp /> Email: wyr20031104@gmail.com
-        </a>
-      </div>
-    );
-  }
-  
+  return (
+    <Space orientation="vertical" size={28} className={`${pageClass} max-w-[820px]`}>
+      <section>
+        <Title className={compactHeroTitleClass}>
+          A personal study notebook
+        </Title>
+        <Paragraph className={heroCopyClass}>
+          Hello, I&apos;m Yanran Wang. This blog started as a React practice project and grew into a place for some study notes.
+        </Paragraph>
+      </section>
+
+      <Card className={cardClass}>
+        <Space orientation="vertical" size={12}>
+          <Title level={3} className="!m-0 !tracking-[-0.03em]">
+            Who lives here
+          </Title>
+          <Paragraph className="!mb-0 !leading-[1.8] !text-[#262626]">
+            Artificial unintelligence, game enthusiasm, and a lot of fast-learning energy.
+          </Paragraph>
+          <Paragraph className="!mb-0 !leading-[1.8] !text-[#262626]">
+            Currently studying at{' '}
+            <Link href="https://www.unsw.edu.au/" target="_blank">
+              UNSW
+            </Link>.
+          </Paragraph>
+        </Space>
+      </Card>
+
+      <Card className={cardClass}>
+        <Space orientation="vertical" size={16}>
+          <div>
+            <Text className={brandClass}>Contact</Text>
+            <Title level={3} className="!mb-0 !mt-2 !tracking-[-0.03em]">
+              Say hello
+            </Title>
+          </div>
+          <Space wrap>
+            <Button className={buttonClass} icon={<FaGithub />} href="https://github.com/ll-msg" target="_blank">
+              GitHub
+            </Button>
+            <Button className={buttonClass} icon={<IoMailSharp />} href="mailto:wyr20031104@gmail.com">
+              Email
+            </Button>
+          </Space>
+          <Text type="secondary">GitHub: ll-msg · Email: wyr20031104@gmail.com</Text>
+        </Space>
+      </Card>
+    </Space>
+  );
+}

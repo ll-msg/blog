@@ -1,38 +1,38 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 export default function Clock() {
-    const [time, setTime] = useState(new Date());
+  const [time, setTime] = useState(new Date());
 
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setTime(new Date());
-        }, 1000);
-        return () => clearInterval(timer);
-    }, []);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
-    const seconds = time.getSeconds();
-    const minutes = time.getMinutes();
-    const hours = time.getHours();
+  const seconds = time.getSeconds();
+  const minutes = time.getMinutes();
+  const hours = time.getHours();
 
-    const secondDeg = seconds * 6;
-    const minuteDeg = minutes * 6 + seconds * 0.1;
-    const hourDeg = (hours % 12) * 30 + minutes * 0.5;
+  const secondDeg = seconds * 6;
+  const minuteDeg = minutes * 6 + seconds * 0.1;
+  const hourDeg = (hours % 12) * 30 + minutes * 0.5;
 
-    return (
-        <div className="relative w-25 h-25 sm:w-30 sm:h-30 rounded-full border-2 border-text-soft flex items-center justify-center bg-bg-soft/40 shadow-lg">
-            <div
-                className="absolute w-1.5 h-7 sm:h-8 bg-white rounded origin-bottom top-1/2 left-1/2"
-                style={{ transform: `translate(-50%, -100%) rotate(${hourDeg}deg)` }}
-            />
-            <div
-                className="absolute w-1 h-10 sm:h-11 bg-white rounded origin-bottom top-1/2 left-1/2"
-                style={{ transform: `translate(-50%, -100%) rotate(${minuteDeg}deg)` }}
-            />
-            <div
-                className="absolute w-0.5 h-12 sm:h-14 bg-red-400 rounded origin-bottom top-1/2 left-1/2"
-                style={{ transform: `translate(-50%, -100%) rotate(${secondDeg}deg)` }}
-            />
-            <div className="w-2 h-2 bg-red-400 rounded-full z-50"></div>
-        </div>
-    );
+  return (
+    <div className="blog-analog-clock" aria-label="Analog clock">
+      <div
+        className="blog-clock-hand blog-clock-hand-hour"
+        style={{ transform: `translateX(-50%) rotate(${hourDeg}deg)` }}
+      />
+      <div
+        className="blog-clock-hand blog-clock-hand-minute"
+        style={{ transform: `translateX(-50%) rotate(${minuteDeg}deg)` }}
+      />
+      <div
+        className="blog-clock-hand blog-clock-hand-second"
+        style={{ transform: `translateX(-50%) rotate(${secondDeg}deg)` }}
+      />
+      <div className="blog-clock-center" />
+    </div>
+  );
 }

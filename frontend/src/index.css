@@ -1,118 +1,55 @@
 @import "tailwindcss";
-
-@custom-variant dark (&:where(.dark, .dark *));
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-@custom-variant dark (&:where(.dark, .dark *));
-
-@layer base {
-  code {
-    @apply bg-gray-700 text-gray-100 px-1 py-0.5 rounded font-mono text-sm;
-  }
-}
-
-.prose code::before {
-  content: none !important;
-}
-.prose code::after {
-  content: none !important;
-}
-.prose > pre {
-  display: contents !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  border: none !important;
-  background: none !important;
-}
-
-.prose h1,
-.prose h2,
-.prose h3,
-.prose h4,
-.prose h5,
-.prose h6 {
-  scroll-margin-top: 80px;
-}
-
-.code-block-wrapper pre {
-  font-size: 1rem !important;
-}
-
-.code-block-wrapper pre code {
-  white-space: inherit !important;
-}
-
-/* Mobile: allow wrapping */
-@media (max-width: 640px) {
-  .code-block-wrapper pre {
-    white-space: pre-wrap !important;
-    word-break: break-word;
-  }
-}
-
-@theme {
-  --color-bg:             var(--color-darkblue-100);
-  --color-bg-soft:        var(--color-darkblue-light);
-  --color-bg-hover:       var(--color-darkblue-lighter);
-  --color-border:         var(--color-darkblue-border);
-  --color-text:           var(--color-darkblue-900);
-  --color-text-soft:      var(--color-darkblue-700);
-
-  --color-darkblue-50: #0B1320;
-  --color-darkblue-100: #0F172A;
-  --color-darkblue-200: #1A2234;
-  --color-darkblue-300: #1E293B;
-  --color-darkblue-400: #273449;
-  --color-darkblue-500: #334155;
-  --color-darkblue-600: #475569;
-  --color-darkblue-700: #64748B;
-  --color-darkblue-800: #94A3B8;
-  --color-darkblue-900: #CBD5E1;
-
-  --color-darkblue-light:   #1E293B;
-  --color-darkblue-lighter: #334155;
-  --color-darkblue-border:  #475569;
-}
-
-:root.dark,
-.dark:root,
-.dark {
-  --color-bg:             #000000;
-  --color-bg-soft:        #0A0A0A;
-  --color-bg-hover:       #111111;
-
-  --color-border:         #1A1A1A;
-
-  --color-text:           #FFFFFF;
-  --color-text-soft:      #C7C7C7;
-
-  --tw-prose-body:        #E5E5E5;
-  --tw-prose-headings:    #FFFFFF;
-  --tw-prose-bold:        #FFFFFF;
-  --tw-prose-links:       #93C5FD;
-  --tw-prose-code:        #FFFFFF;
-  --tw-prose-bullets:     #A3A3A3;
-  --tw-prose-quotes:      #AAAAAA;
-  --tw-prose-quote-borders: #333333;
-}
-
-
-@layer utilities {
-  .prose-darkblue {
-    --tw-prose-body:          var(--color-darkblue-800);
-    --tw-prose-headings:      var(--color-darkblue-900);
-    --tw-prose-bold:          var(--color-darkblue-900);
-    --tw-prose-links:         var(--color-darkblue-700);
-    --tw-prose-bullets:       var(--color-darkblue-600);
-    --tw-prose-quotes:        var(--color-darkblue-400);
-    --tw-prose-quote-borders: var(--color-darkblue-300);
-    --tw-prose-code:          var(--color-darkblue-900);
-    --tw-prose-th-borders:    var(--color-darkblue-300);
-    --tw-prose-td-borders:    var(--color-darkblue-200);
-  }
-}
-
 @plugin "./typography.js";
 
+@theme {
+  --font-sans: Arial, "Microsoft YaHei", "微软雅黑", sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+    font-family: var(--font-sans);
+    color: #111111;
+    background:
+      radial-gradient(circle at top, rgba(0, 0, 0, 0.035), transparent 30%),
+      linear-gradient(180deg, #ffffff 0%, #fbfbfb 100%);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    background:
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.018), transparent 22%),
+      linear-gradient(to right, rgba(0, 0, 0, 0.015), transparent 18%, transparent 82%, rgba(0, 0, 0, 0.015));
+  }
+
+  a {
+    color: inherit;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+}
