@@ -72,13 +72,9 @@ export default function ArticleForm({ mode = 'create', article = null }) {
   return (
     <Space orientation="vertical" size={28} className={pageClass}>
       <section>
-        <Text className={brandClass}>Editor</Text>
         <Title className={compactHeroTitleClass}>
           {mode === 'create' ? 'Create a new article.' : 'Revise this article.'}
         </Title>
-        <Paragraph className={heroCopyClass}>
-          The editor now leans on Ant Design inputs and cards so the structure stays simple while markdown remains the focus.
-        </Paragraph>
       </section>
 
       <Card className={cardClass}>
