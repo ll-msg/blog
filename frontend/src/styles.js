@@ -39,9 +39,13 @@ export const editorGridClass = 'grid gap-6 md:grid-cols-2';
 
 export const markdownClass = [
   'prose prose-neutral max-w-none font-sans text-[#111111]',
-  'prose-headings:scroll-mt-24 prose-headings:tracking-[-0.03em] prose-headings:text-[#111111]',
-  'prose-p:text-[16px] prose-p:leading-[1.9] prose-p:text-[#262626]',
-  'prose-li:text-[16px] prose-li:leading-[1.9] prose-li:text-[#262626]',
+  'prose-headings:scroll-mt-24 prose-headings:text-[#111111]',
+  '[&_h1]:text-[2.2rem] [&_h1]:font-extrabold [&_h1]:tracking-[-0.05em]',
+  '[&_h2]:text-[1.7rem] [&_h2]:font-bold [&_h2]:tracking-[-0.04em]',
+  '[&_h3]:text-[1.3rem] [&_h3]:font-semibold [&_h3]:tracking-[-0.03em]',
+  '[&_h4]:text-[1.05rem] [&_h4]:font-semibold [&_h4]:tracking-[-0.02em]',
+  '[&_p]:text-[14px] [&_p]:leading-[1.85] [&_p]:text-[#262626]',
+  '[&_li]:text-[14px] [&_li]:leading-[1.85] [&_li]:text-[#262626]',
   'prose-blockquote:border-l-[3px] prose-blockquote:border-[#111111] prose-blockquote:py-2 prose-blockquote:pl-[18px] prose-blockquote:text-[#595959] prose-blockquote:font-normal',
   'prose-a:underline prose-a:decoration-1 prose-a:underline-offset-[3px] prose-a:text-inherit',
   'prose-code:before:content-none prose-code:after:content-none',
