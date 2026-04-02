@@ -35,26 +35,64 @@ import {
 
 const { Text, Title } = Typography;
 
+function extractHeadingText(node) {
+  if (!node) return '';
+
+  if (node.type === 'text' || node.type === 'inlineCode') {
+    return node.value || '';
+  }
+
+  if (!node.children) return '';
+
+  return node.children.map(extractHeadingText).join('');
+}
+
+function createHeadingId(text, slugCounts) {
+  const baseSlug = text
+    .normalize('NFKD')
+    .toLowerCase()
+    .trim()
+    .replace(/[^\p{Letter}\p{Number}\s-]/gu, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '') || 'section';
+
+  const count = slugCounts.get(baseSlug) || 0;
+  slugCounts.set(baseSlug, count + 1);
+
+  return count === 0 ? baseSlug : `${baseSlug}-${count}`;
+}
+
 function generateToc(markdown) {
   if (!markdown) return [];
 
   const tree = unified().use(remarkParse).use(remarkGfm).parse(markdown);
   const toc = [];
+  const slugCounts = new Map();
+  const stack = [];
 
   visit(tree, 'heading', (node) => {
-    if (node.depth >= 1 && node.depth <= 3) {
-      const text = node.children
-        .filter((child) => child.type === 'text' || child.type === 'inlineCode')
-        .map((child) => child.value)
-        .join('');
+    if (node.depth < 1 || node.depth > 4) return;
 
-      const id = text
-        .toLowerCase()
-        .replace(/[^\w]+/g, '-')
-        .replace(/(^-|-$)/g, '');
+    const text = extractHeadingText(node).trim();
+    if (!text) return;
 
-      toc.push({ key: id, href: `#${id}`, title: text });
+    const id = createHeadingId(text, slugCounts);
+    const item = { key: id, href: `#${id}`, title: text };
+
+    while (stack.length > 0 && stack[stack.length - 1].depth >= node.depth) {
+      stack.pop();
     }
+
+    if (stack.length === 0) {
+      toc.push(item);
+    } else {
+      const parent = stack[stack.length - 1].item;
+      parent.children = parent.children || [];
+      parent.children.push(item);
+    }
+
+    stack.push({ depth: node.depth, item });
   });
 
   return toc;
