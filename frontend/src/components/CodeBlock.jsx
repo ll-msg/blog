@@ -20,7 +20,7 @@ export default function CodeBlock({content}) {
                                   PreTag="pre"
                                   customStyle={{
                                     margin: 0,
-                                    fontSize: '0.95rem',
+                                    fontSize: '0.8rem',
                                     borderRadius: 0,
                                     background: '#fafafa',
                                   }}
