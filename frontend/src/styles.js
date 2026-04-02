@@ -47,9 +47,10 @@ export const markdownClass = [
   '[&_p]:text-[14px] [&_p]:leading-[1.85] [&_p]:text-[#262626]',
   '[&_li]:text-[14px] [&_li]:leading-[1.85] [&_li]:text-[#262626]',
   'prose-blockquote:border-l-[3px] prose-blockquote:border-[#111111] prose-blockquote:py-2 prose-blockquote:pl-[18px] prose-blockquote:text-[#595959] prose-blockquote:font-normal',
-  'prose-a:underline prose-a:decoration-1 prose-a:underline-offset-[3px] prose-a:text-inherit',
+  'prose-a:text-[#1677ff] prose-a:underline prose-a:decoration-1 prose-a:underline-offset-[3px] hover:prose-a:text-[#0958d9]',
   'prose-code:before:content-none prose-code:after:content-none',
   'prose-pre:m-0 prose-pre:bg-transparent prose-pre:p-0',
+  '[&_.katex-display]:overflow-x-auto [&_.katex-display]:overflow-y-hidden [&_.katex-display]:py-2',
 ].join(' ');
 
 export const drawerClass = '[&_.ant-drawer-header]:border-b [&_.ant-drawer-header]:border-[#dedede] [&_.ant-drawer-body]:pt-3';

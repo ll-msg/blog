@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { ConfigProvider, theme } from 'antd';
 import { CategoryProvider } from './components/CategoryContext.jsx';
 import 'antd/dist/reset.css';
+import 'katex/dist/katex.min.css';
 import './index.css';
 import App from './App.jsx';
 

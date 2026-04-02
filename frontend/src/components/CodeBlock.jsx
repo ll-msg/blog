@@ -1,5 +1,7 @@
 import remarkGfm from 'remark-gfm'
+import remarkMath from 'remark-math';
 import rehypeRaw from "rehype-raw";
+import rehypeKatex from 'rehype-katex';
 import rehypeSlug from "rehype-slug";
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { atomOneLight } from "react-syntax-highlighter/dist/esm/styles/hljs";
@@ -7,7 +9,7 @@ import ReactMarkdown from "react-markdown";
 
 export default function CodeBlock({content}) {
     return(
-        <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw, rehypeSlug]}
+        <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeRaw, rehypeKatex, rehypeSlug]}
             components={{
                 code({node, inline, className, children, ...props}) {
                     const match = /language-(\w+)/.exec(className || "");
