@@ -38,7 +38,7 @@ export default function Home() {
   return (
     <Space orientation="vertical" size={32} className={pageStackClass}>
       <section className={`${heroSectionClass} border-b border-[#e5e5e5] pb-8`}>
-        <Title className={heroTitleClass}>A minimal reading space for study notes.</Title>
+        <Title className={heroTitleClass}>A small reading space for study notes.</Title>
         <Paragraph className={heroCopyClass}>
           个人学习记录站，不定时更新中
         </Paragraph>
