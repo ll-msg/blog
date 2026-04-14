@@ -126,14 +126,12 @@ export default function Layout({ children }) {
       </Header>
 
       <Drawer
-        title="Navigate"
         placement="left"
         onClose={() => setMobileOpen(false)}
         open={mobileOpen}
         className={drawerClass}
       >
         <Space orientation="vertical" size={20} className={pageClass}>
-          <NavLinks onNavigate={() => setMobileOpen(false)} />
           <Input.Search
             allowClear
             value={input}
