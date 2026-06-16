@@ -174,11 +174,11 @@ export default function Article() {
   return (
     <Space orientation="vertical" size={24} className={pageClass}>
       <Button icon={<FaBars />} onClick={() => setOpen(true)} className={`${buttonClass} !w-fit`}>
-        Browse posts
+        Browse all posts
       </Button>
 
       <Drawer
-        title="Archive"
+        title="Directory"
         placement="left"
         onClose={() => setOpen(false)}
         open={open}
@@ -189,7 +189,6 @@ export default function Article() {
 
       <div className={articleLayoutClass}>
         <div className="min-w-0">
-          <Card className={cardClass}>
             <Space orientation="vertical" size={18} className={pageClass}>
               <Space wrap className="!flex !w-full !justify-between">
                 <Space wrap>
@@ -239,11 +238,9 @@ export default function Article() {
                 <CodeBlock content={markdown} />
               </div>
             </Space>
-          </Card>
         </div>
 
         <aside className={articleAsideClass}>
-          <Card className={cardClass}>
             <Typography>
               <Title level={5} className={sidebarTitleClass}>On this page</Title>
             </Typography>
@@ -252,7 +249,6 @@ export default function Article() {
             ) : (
               <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="No headings yet" />
             )}
-          </Card>
         </aside>
       </div>
     </Space>
