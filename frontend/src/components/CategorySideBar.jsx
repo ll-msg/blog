@@ -47,7 +47,7 @@ export default function CategorySideBar({ article, onNavigate }) {
                     navigate(`/article/${entry.id}`);
                     onNavigate?.();
                   }}
-                  className={`${active ? 'font-bold text-[#111111]' : 'font-normal text-[#595959]'} no-underline transition-colors hover:text-[#111111]`}
+                  className={`${active ? 'font-bold text-[#4df0ff]' : 'font-normal text-[#9fd8e6]'} no-underline transition-colors hover:text-[#4df0ff]`}
                 >
                   {entry.title}
                 </a>

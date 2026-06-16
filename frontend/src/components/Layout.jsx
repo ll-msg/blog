@@ -24,6 +24,7 @@ import {
   navLinkClass,
   pageClass,
   shellClass,
+  siteTitleClass,
 } from '../styles';
 
 const { Header, Content } = AntLayout;
@@ -98,6 +99,9 @@ export default function Layout({ children }) {
                 onClick={() => setMobileOpen(true)}
                 className={`${buttonClass} ${mobileMenuButtonClass}`}
               />
+              <NavLink to="/" end className={`${siteTitleClass} !text-[18px] whitespace-nowrap`}>
+                ◢ YANRAN_BLOG
+              </NavLink>
               <div className="hidden md:flex">
                 <NavLinks />
               </div>

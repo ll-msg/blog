@@ -217,8 +217,8 @@ export default function Article() {
               </Space>
 
               <div>
-                <Text className={brandClass}>Article</Text>
-                <Title className="!mb-3 !mt-2 tracking-[-0.03em]">{article.title}</Title>
+                <Text className={brandClass}>// ARTICLE</Text>
+                <Title className="!mb-3 !mt-2 !font-[Orbitron] !font-bold tracking-[0.01em] !text-[#eaffff] [text-shadow:0_0_14px_rgba(77,240,255,0.45)]">{article.title}</Title>
                 <Space wrap size={[12, 8]}>
                   <Text type="secondary">Last modified: {new Date(article.created_at).toLocaleDateString()}</Text>
                   <Text type="secondary"><FaEye className="mr-1.5 inline-block" />{article.views}</Text>

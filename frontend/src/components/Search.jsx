@@ -29,7 +29,7 @@ function escapeRegex(input) {
 function highlight(text, keyword) {
   if (!keyword) return text;
   const regex = new RegExp(`(${escapeRegex(keyword)})`, 'gi');
-  return text.replace(regex, "<mark class='rounded bg-[#111111] px-1 text-white'>$1</mark>");
+  return text.replace(regex, "<mark class='bg-[#4df0ff] px-1 text-[#05080d]'>$1</mark>");
 }
 
 export default function Search() {
@@ -65,8 +65,8 @@ export default function Search() {
             return (
               <List.Item className="cursor-pointer" onClick={() => navigate(`/article/${article.id}`)}>
                 <List.Item.Meta
-                  title={<div className="m-0 text-[1.125rem] font-semibold tracking-[-0.03em] text-[#111111]" dangerouslySetInnerHTML={{ __html: highlight(article.title, query) }} />}
-                  description={<p className="mb-0 text-[#8c8c8c]" dangerouslySetInnerHTML={{ __html: highlighted }} />}
+                  title={<div className="m-0 text-[1.125rem] font-semibold tracking-[-0.03em] text-[#eaffff]" dangerouslySetInnerHTML={{ __html: highlight(article.title, query) }} />}
+                  description={<p className="mb-0 text-[#9fd8e6]" dangerouslySetInnerHTML={{ __html: highlighted }} />}
                 />
               </List.Item>
             );

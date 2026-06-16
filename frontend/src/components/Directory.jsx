@@ -61,7 +61,7 @@ export default function Directory() {
               actions={[<FaChevronRight key="arrow" />]}
             >
               <List.Item.Meta
-                title={<div className="m-0 text-[1.125rem] font-semibold tracking-[-0.03em] text-[#111111]">{item.title}</div>}
+                title={<div className="m-0 text-[1.125rem] font-semibold tracking-[-0.03em] text-[#eaffff]">{item.title}</div>}
               />
             </List.Item>
           )}

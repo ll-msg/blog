@@ -29,10 +29,10 @@ export default function About() {
           <Title level={3} className="!m-0 !tracking-[-0.03em]">
             Who lives here
           </Title>
-          <Paragraph className="!mb-0 !leading-[1.8] !text-[#262626]">
+          <Paragraph className="!mb-0 !leading-[1.8] !text-[#9fd8e6]">
             Artificial unintelligence, game enthusiasm, and a lot of fast-learning energy.
           </Paragraph>
-          <Paragraph className="!mb-0 !leading-[1.8] !text-[#262626]">
+          <Paragraph className="!mb-0 !leading-[1.8] !text-[#9fd8e6]">
             Currently studying at{' '}
             <Link href="https://www.unsw.edu.au/" target="_blank">
               UNSW
