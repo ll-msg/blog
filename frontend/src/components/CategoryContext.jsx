@@ -8,17 +8,10 @@ export function CategoryProvider({ children }) {
 
     useEffect(() => {
         async function loadAll() {
-            // get categories
-            const cats = await apiCall("GET", `${API_BASE}/categories`, null, null, "Cannot get categories");
+            // get categories with directories
+            const cats = await apiCall("GET", `${API_BASE}/categories/directories`, null, null, "Cannot get categories");
             if (!cats) return;
-            // get all directories
-            const directories = await Promise.all(
-                cats.map(async(c) => {
-                    const dir = await apiCall("GET", `${API_BASE}/${c.id}/directory`, null, null, "Cannot get directories");
-                    return {...c, articles: dir || []}
-                })
-            )
-            setCategories(directories);
+            setCategories(cats);
         }
         loadAll();
     }, []);

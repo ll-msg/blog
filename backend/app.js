@@ -294,6 +294,28 @@ app.get('/categories', async function(req, res) {
 })
 
 /**
+ * Category With Directories Route
+ */
+app.get('/categories/directories', async function(req, res) {
+  try{
+    const result = await pool.query(`
+      SELECT c.id, c.name, c.description,
+        COALESCE(
+          json_agg(json_build_object('id', a.id, 'title', a.title) ORDER BY a.id ASC)
+          FILTER (WHERE a.id IS NOT NULL), '[]'
+        ) AS articles
+      FROM categories c
+      LEFT JOIN articles a ON a.category_id = c.id
+      GROUP BY c.id
+    `);
+    res.json(result.rows);
+  } catch(err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to retrieve the categories' });
+  }
+})
+
+/**
  * Search Route
  */
 app.get('/search', async function(req, res) {
