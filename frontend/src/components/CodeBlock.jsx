@@ -40,6 +40,16 @@ export default function CodeBlock({content}) {
                             {children}
                         </code>
                     );
+                },
+                a({node, children, ...props}) {
+                    return (
+                        <a
+                          {...props}
+                          className="text-[#1677ff] underline decoration-1 underline-offset-[3px] hover:text-[#0958d9]"
+                        >
+                            {children}
+                        </a>
+                    );
                 }
             }}
         >

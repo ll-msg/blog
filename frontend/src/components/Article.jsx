@@ -105,9 +105,13 @@ export default function Article() {
   const [open, setOpen] = useState(false);
   const [prev, setPrev] = useState(null);
   const [next, setNext] = useState(null);
+  const [translated, setTranslated] = useState(null);
+  const [showTranslated, setShowTranslated] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
+    setTranslated(null);
+    setShowTranslated(false);
     apiCall('GET', `${API_BASE}/article/${articleId}`).then((data) => {
       if (data) setArticle(data);
     });
@@ -134,26 +138,31 @@ export default function Article() {
     });
   }, [article]);
 
-  const getTargetLang = () => {
-    const lang = (navigator.language || 'en').toLowerCase();
-    return lang.split('-')[0].toUpperCase();
-  };
-
   const handleTranslate = async () => {
     if (!article?.body) return;
-    const targetLang = getTargetLang();
+    // already translated, switch back to original
+    if (showTranslated) {
+      setShowTranslated(false);
+      return;
+    }
+    // translated before, reuse the cached result
+    if (translated) {
+      setShowTranslated(true);
+      return;
+    }
     const response = await apiCall('POST', `${API_BASE}/translate`, {
       text: article.body,
-      target_lang: targetLang,
+      target_lang: 'EN',
     });
 
-    const translated = response?.translated_text;
-    if (!translated) {
+    const translatedText = response?.translated_text;
+    if (!translatedText) {
       alert('Translation failed.');
       return;
     }
 
-    setArticle((prevArticle) => ({ ...prevArticle, body: translated }));
+    setTranslated(translatedText);
+    setShowTranslated(true);
   };
 
   const startDelete = async () => {
@@ -164,7 +173,7 @@ export default function Article() {
     }
   };
 
-  const markdown = article?.body?.replace(/\\n/g, '\n') || '';
+  const markdown = (showTranslated ? translated : article?.body)?.replace(/\\n/g, '\n') || '';
   const tocItems = generateToc(markdown);
 
   if (!article) {
@@ -218,7 +227,7 @@ export default function Article() {
 
               <Space wrap>
                 <Button className={buttonClass} icon={<MdTranslate />} onClick={handleTranslate}>
-                  Translate
+                  {showTranslated ? 'Original' : 'Translate'}
                 </Button>
                 {role === 'admin' && (
                   <Button className={buttonClass} icon={<FaEdit />} onClick={() => navigate('update')}>
