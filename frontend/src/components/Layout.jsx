@@ -9,7 +9,7 @@ import {
   Space,
   Typography,
 } from 'antd';
-import { FaGithub, FaHome, FaInfoCircle, FaBars, FaSearch } from 'react-icons/fa';
+import { FaGithub, FaHome, FaInfoCircle, FaBars, FaSearch, FaPlus } from 'react-icons/fa';
 import { apiCall, API_BASE } from './Helper';
 import {
   buttonClass,
@@ -136,6 +136,15 @@ export default function Layout({ children }) {
         className={drawerClass}
       >
         <Space orientation="vertical" size={20} className={pageClass}>
+          {loggedIn && (
+            <div className="flex items-center gap-3 border border-[#4df0ff]/25 bg-[#4df0ff]/5 px-3 py-3">
+              <Avatar src={user?.avatar} alt="menu-avatar" />
+              <div className="min-w-0">
+                <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#4df0ff]">// WELCOME</div>
+                <div className="truncate font-mono text-[14px] text-[#eaffff]">{user?.username}</div>
+              </div>
+            </div>
+          )}
           <Input.Search
             allowClear
             value={input}
@@ -151,6 +160,11 @@ export default function Layout({ children }) {
           <Button className={buttonClass} icon={<FaInfoCircle />} block onClick={() => { navigate('/about'); setMobileOpen(false); }}>
             About
           </Button>
+          {user?.role === 'admin' && (
+            <Button className={buttonClass} icon={<FaPlus />} block onClick={() => { navigate('/content/create'); setMobileOpen(false); }}>
+              Create article
+            </Button>
+          )}
           {!loggedIn && (
             <Button className={buttonClass} icon={<FaGithub />} block onClick={handleLogin}>
               GitHub Login
