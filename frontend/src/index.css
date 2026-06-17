@@ -2,9 +2,9 @@
 @plugin "./typography.js";
 
 @theme {
-  --font-sans: -apple-system, "Segoe UI", Roboto, "Microsoft YaHei", "微软雅黑", sans-serif;
-  --font-mono: "Share Tech Mono", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-  --font-display: "Orbitron", "Share Tech Mono", sans-serif;
+  --font-sans: -apple-system, "Segoe UI", Roboto, "Noto Sans SC", "Microsoft YaHei", "微软雅黑", sans-serif;
+  --font-mono: "Share Tech Mono", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, "Noto Sans SC", monospace;
+  --font-display: "Orbitron", "Noto Sans SC", sans-serif;
 }
 
 @layer base {
