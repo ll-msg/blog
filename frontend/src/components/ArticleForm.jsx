@@ -42,10 +42,10 @@ export default function ArticleForm({ mode = 'create', article = null }) {
     }
 
     if (mode === 'create') {
+      // author is taken from the auth cookie on the server, not sent from here
       const result = await apiCall('POST', `${API_BASE}/article/create`, {
         title,
         content,
-        userId: 1,
         createdAt: new Date().toISOString(),
         categoryName: originalCategory?.name,
       });

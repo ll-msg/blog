@@ -72,6 +72,31 @@ passport.use(new JwtStrategy(opts, async function(jwt_payload, done) {
 
 
 /**
+ * Auth guards
+ * requireAuth: rejects the request unless a valid accessToken cookie is present.
+ * requireAdmin: additionally requires the role stored in the database to be 'admin'.
+ * The role is read from req.user (the users row loaded by JwtStrategy), never from
+ * the request body, so the client cannot promote itself.
+ */
+function requireAuth(req, res, next) {
+  passport.authenticate('jwt', { session: false }, (err, user) => {
+    if (err) return next(err);
+    if (!user) return res.status(401).json({ error: 'Authentication required' });
+    req.user = user;
+    next();
+  })(req, res, next);
+}
+
+function requireAdmin(req, res, next) {
+  requireAuth(req, res, () => {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Admin access required' });
+    }
+    next();
+  });
+}
+
+/**
  * Health check for render
  */
 app.get('/health', (req, res) => {
@@ -132,34 +157,45 @@ app.get('/token/refresh', async(req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) return res.status(401).json({ error: "No refresh token" });
-    
+
     // verify token
-    jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, async(err, payload) => {
-      if (err) return res.status(403).json({ error: "Invalid refresh token" });
-      const result = await pool.query('SELECT * FROM users WHERE github_id = $1', [
-        payload.github_id
-      ]);
-      const userInfo = result.rows[0];
-      if (!user) return res.status(404).json({ error: "User not found" });
-      
-      // issue new access token
-      const newAccessToken = jwt.sign(
-        {
-          github_id: userInfo.github_id,
-          username: userInfo.username,
-          role: userInfo.role,
-          avatar: userInfo.avatar
-        },
-        process.env.JWT_SECRET,
-        { expiresIn: '30m' }
-      );
-      res.cookie('accessToken', newAccessToken, {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'none',
-        maxAge: 30 * 60 * 1000
-      });
-    })
+    let payload;
+    try {
+      payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, { algorithms: ['HS256'] });
+    } catch {
+      return res.status(403).json({ error: "Invalid refresh token" });
+    }
+
+    const result = await pool.query('SELECT * FROM users WHERE github_id = $1', [
+      payload.github_id
+    ]);
+    const userInfo = result.rows[0];
+    if (!userInfo) return res.status(404).json({ error: "User not found" });
+
+    // issue new access token, with the role re-read from the database
+    const newAccessToken = jwt.sign(
+      {
+        github_id: userInfo.github_id,
+        username: userInfo.username,
+        role: userInfo.role,
+        avatar: userInfo.avatar
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '30m' }
+    );
+    res.cookie('accessToken', newAccessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      maxAge: 30 * 60 * 1000
+    });
+    return res.json({
+      loggedIn: true,
+      github_id: userInfo.github_id,
+      username: userInfo.username,
+      role: userInfo.role,
+      avatar: userInfo.avatar
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
@@ -195,10 +231,12 @@ async function getDbId(db, field, value) {
   const dbId = await pool.query(`SELECT id FROM ${db} WHERE ${field} = $1`, [value]);
   return dbId.rows[0]?.id;
 }
-app.post('/article/create', async function(req, res) {
+app.post('/article/create', requireAdmin, async function(req, res) {
   try {
-    const { title, content, userId, createdAt, categoryName } = req.body;
+    const { title, content, createdAt, categoryName } = req.body;
     const categoryId = await getDbId('categories', 'name', categoryName);
+    // author comes from the verified token, not from the request body
+    const userId = req.user.id;
 
     const result = await pool.query(`
       INSERT INTO articles (title, body, user_id, created_at, category_id)
@@ -237,7 +275,7 @@ async function findCategoryId(categoryName) {
   return result.rows[0].id;
 }
 
-app.put('/article/:articleId', async function(req, res) {
+app.put('/article/:articleId', requireAdmin, async function(req, res) {
   try{
     const articleId = req.params.articleId
     const {title, content, categoryName} = req.body;
@@ -253,10 +291,14 @@ app.put('/article/:articleId', async function(req, res) {
   }
 })
 
-app.delete('/article/:articleId', async (req, res) => {
+app.delete('/article/:articleId', requireAdmin, async (req, res) => {
   try{
     const articleId = req.params.articleId;
     const result = await pool.query(`DELETE FROM articles WHERE id = $1`, [articleId]);
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: 'Article not found' });
+    }
+    res.json({ deleted: Number(articleId) });
   } catch(err) {
     console.log(err);
     res.status(500).json({ error: 'Failed to delete the article' });
@@ -345,13 +387,34 @@ app.post('/view/increment', async function(req, res) {
 
 /**
  * Article Translate Route
+ * Public on purpose: guests can translate too. The target language is limited to
+ * the pair the blog actually offers, and the payload is capped so the DeepL quota
+ * cannot be drained with one huge request.
  */
+const TRANSLATE_TARGETS = {
+  EN: 'EN-US',  // English (US) — plain 'EN' is deprecated as a DeepL target
+  ZH: 'ZH'      // Simplified Chinese
+};
+const TRANSLATE_MAX_CHARS = 50000;
+
 app.post('/translate', async function(req, res) {
   const { text, target_lang } = req.body;
+
+  if (typeof text !== 'string' || !text.trim()) {
+    return res.status(400).json({ error: "Nothing to translate." });
+  }
+  if (text.length > TRANSLATE_MAX_CHARS) {
+    return res.status(413).json({ error: `Text too long to translate (limit ${TRANSLATE_MAX_CHARS} characters).` });
+  }
+  const deeplTarget = TRANSLATE_TARGETS[String(target_lang || '').toUpperCase()];
+  if (!deeplTarget) {
+    return res.status(400).json({ error: `Unsupported target language. Use one of: ${Object.keys(TRANSLATE_TARGETS).join(', ')}.` });
+  }
+
   try {
     const params = new URLSearchParams();
     params.append("text", text);
-    params.append("target_lang", target_lang);
+    params.append("target_lang", deeplTarget);
     const deeplRes = await fetch("https://api-free.deepl.com/v2/translate", {
         method: "POST",
         headers: {
@@ -371,7 +434,11 @@ app.post('/translate', async function(req, res) {
     if (!data.translations) {
         return res.status(400).json({ error: data.message || "DeepL error" });
     }
-    return res.json({ translated_text: data.translations[0].text });
+    return res.json({
+      translated_text: data.translations[0].text,
+      detected_source_language: data.translations[0].detected_source_language,
+      target_lang: deeplTarget
+    });
 
   } catch (err) {
       console.error("DeepL proxy error:", err);

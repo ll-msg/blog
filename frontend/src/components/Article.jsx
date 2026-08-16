@@ -35,6 +35,29 @@ import {
 
 const { Text, Title } = Typography;
 
+const LANGUAGE_LABELS = { EN: 'English', ZH: '中文' };
+
+/**
+ * Picks the language to translate INTO by looking at what the article is written in.
+ * Code blocks, inline code and links are stripped first: a Chinese post about
+ * algorithms is mostly Latin characters inside its code, which would otherwise
+ * make it look like an English post.
+ */
+function detectTargetLang(markdown) {
+  const prose = (markdown || '')
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/`[^`]*`/g, ' ')
+    .replace(/https?:\/\/\S+/g, ' ');
+
+  const cjkCount = (prose.match(/[一-鿿㐀-䶿]/g) || []).length;
+  const latinCount = (prose.match(/[A-Za-z]/g) || []).length;
+  if (cjkCount === 0) return 'ZH';
+
+  // Chinese posts quote plenty of English terms, so a low ratio still means Chinese.
+  const cjkRatio = cjkCount / (cjkCount + latinCount);
+  return cjkRatio >= 0.05 ? 'EN' : 'ZH';
+}
+
 function extractHeadingText(node) {
   if (!node) return '';
 
@@ -105,13 +128,15 @@ export default function Article() {
   const [open, setOpen] = useState(false);
   const [prev, setPrev] = useState(null);
   const [next, setNext] = useState(null);
-  const [translated, setTranslated] = useState(null);
+  const [translations, setTranslations] = useState({});
   const [showTranslated, setShowTranslated] = useState(false);
+  const [translating, setTranslating] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    setTranslated(null);
+    setTranslations({});
     setShowTranslated(false);
+    setTranslating(false);
     apiCall('GET', `${API_BASE}/article/${articleId}`).then((data) => {
       if (data) setArticle(data);
     });
@@ -138,22 +163,29 @@ export default function Article() {
     });
   }, [article]);
 
+  const originalMarkdown = article?.body?.replace(/\\n/g, '\n') || '';
+  // Chinese post -> English, anything else -> Chinese
+  const targetLang = detectTargetLang(originalMarkdown);
+
   const handleTranslate = async () => {
-    if (!article?.body) return;
+    if (!originalMarkdown) return;
     // already translated, switch back to original
     if (showTranslated) {
       setShowTranslated(false);
       return;
     }
-    // translated before, reuse the cached result
-    if (translated) {
+    // translated before, reuse the cached result for this language
+    if (translations[targetLang]) {
       setShowTranslated(true);
       return;
     }
+
+    setTranslating(true);
     const response = await apiCall('POST', `${API_BASE}/translate`, {
-      text: article.body,
-      target_lang: 'EN',
+      text: originalMarkdown,
+      target_lang: targetLang,
     });
+    setTranslating(false);
 
     const translatedText = response?.translated_text;
     if (!translatedText) {
@@ -161,7 +193,7 @@ export default function Article() {
       return;
     }
 
-    setTranslated(translatedText);
+    setTranslations((prev) => ({ ...prev, [targetLang]: translatedText }));
     setShowTranslated(true);
   };
 
@@ -173,7 +205,7 @@ export default function Article() {
     }
   };
 
-  const markdown = (showTranslated ? translated : article?.body)?.replace(/\\n/g, '\n') || '';
+  const markdown = showTranslated ? translations[targetLang] : originalMarkdown;
   const tocItems = generateToc(markdown);
 
   if (!article) {
@@ -226,8 +258,13 @@ export default function Article() {
               </div>
 
               <Space wrap>
-                <Button className={buttonClass} icon={<MdTranslate />} onClick={handleTranslate}>
-                  {showTranslated ? 'Original' : 'Translate'}
+                <Button
+                  className={buttonClass}
+                  icon={<MdTranslate />}
+                  onClick={handleTranslate}
+                  loading={translating}
+                >
+                  {showTranslated ? 'Original' : `Translate to ${LANGUAGE_LABELS[targetLang]}`}
                 </Button>
                 {role === 'admin' && (
                   <Button className={buttonClass} icon={<FaEdit />} onClick={() => navigate('update')}>
